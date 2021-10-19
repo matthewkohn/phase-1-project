@@ -12,3 +12,7 @@ h1#title {
   color: lightcyan
   /* margin-top: 0; */
 }
+
+div#coin-container {
+  height: 200px;
+}
