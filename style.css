@@ -1,0 +1,14 @@
+body {
+  background-color: lightcyan;
+  margin: 0;
+}
+
+header {
+  background-color: rgba(89, 179, 0, 0.65);
+  height: 100px;
+}
+
+h1#title {
+  color: lightcyan
+  /* margin-top: 0; */
+}

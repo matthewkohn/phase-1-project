@@ -3,12 +3,12 @@
 A single page application that displays on-the-fly crypto prices
 
 ### User Story:
-- 	“As a user, when I open the page I’d like to see price information on bitcoin by default”
-- 	“As a user, I want to be able to view price information of the crypto I select/input”
-- 	“As a user, I want to input the amount of a crypto I select, and view the value of that crypto to the page”
+- “As a user, when I open the page I’d like to see price information on bitcoin by default”
+- “As a user, I want to be able to view price information of the crypto I select/input”
+-	“As a user, I want to input the amount of a crypto I select, and view the value of that crypto to the page”
 
 ### MVP:
-- 	Use json data from bravenewcoin to display the current price of a crypto that has been selected in the DOM
+- Use json data from bravenewcoin to display the current price of a crypto that has been selected in the DOM
 
 *******
 ## GUIDELINES:
