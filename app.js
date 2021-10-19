@@ -1,4 +1,5 @@
-const API_URL = 'https://www.coingecko.com/en/api/simple/price';
+const baseURLpre = 'https://api.coingecko.com/api/v3/simple/price?ids=';
+const baseURLpost = '&vs_currencies=usd';
 const options = {
   method: 'GET',
   mode: 'no-cors',
@@ -6,14 +7,24 @@ const options = {
     'Content-Type': 'application/json'
   },
 }
+const searchForm = document.getElementById("search-form");
+const input = document.getElementById("search-input");
 
-//  fetch(API_URL)
-//   .then(response => response.json())
-//   .then(data => console.log(data))
+searchForm.addEventListener('submit', handleSubmit);
 
-function getCrypto() {
-  fetch(API_URL, options)
-    .then(response => console.log(response.json()))
-    .then(result => console.log(result));
+function handleSubmit(event) {
+  event.preventDefault();
+  console.log(input.value);
+  fetch(baseURLpre + input.value + baseURLpost)
+    .then(response => response.json())
+    .then(data => console.log(data))
 }
-document.addEventListener('DOMContentLoaded', getCrypto);
+
+
+// function getCrypto() {
+//   fetch(API_URL, options)
+//     .then(response => console.log(response.json()))
+//     .then(result => console.log(result));
+// }
+
+// document.addEventListener('DOMContentLoaded', getCrypto);
