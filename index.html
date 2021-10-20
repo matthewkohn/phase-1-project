@@ -5,19 +5,20 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./style.css">
-  <title>Crypto Book</title>
+  <title>Crypto Price Lookup</title>
 </head>
 <body>
   <header>
     <div>
-      <h1 id="title">Crypto Prices</h1>
+      <h1 id="title">Crypto Price Lookup</h1>
     </div>
     
   </header>
   <main>
     <form id="search-form">
+      <p class="instructions">Choose one of the most popular Cryptocurrencies to see how much it's worth right now!</p>
       <select name="coins" id="coins-dropdown">
-        <option>Choose a Coin</option>
+        <option id="default-label">Choose a Coin</option>
         <option value="bitcoin">Bitcoin (BTC)</option>
         <option value="ethereum">Ethereum (ETH)</option>
         <option value="binancecoin">Binance Coin (BNC)</option>
@@ -34,17 +35,14 @@
         <option value="cosmos">Cosmos (ATOM)</option>
         <option value="vechain">VeChain (VET)</option>
         <option value="internet-computer">Internet Computer (ICP)</option>
-
-
       </select>
-      <!-- <input type="text" name="name" id="search-input"> -->
-      <!-- <input type="submit" value="Submit"> -->
+      <p class="instructions">Prices are displayed in $USD</p>
     </form>
     <div id="coin-container"></div>
   </main>
   <footer>
     <!-- API credit -->
-    <span>Powered by 
+    <span id="footer-span">Powered by 
       <a href="https://www.coingecko.com/en">
         <img src="https://static.coingecko.com/s/coingecko-branding-guide-4f5245361f7a47478fa54c2c57808a9e05d31ac7ca498ab189a3827d6000e22b.png" alt="CoinGecko Logo Image" id="logo" target="_blank">
       </a>

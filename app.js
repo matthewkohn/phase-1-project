@@ -7,24 +7,18 @@ const coinsListURL = 'https://api.coingecko.com/api/v3/coins/cardano/tickers/bin
 let targetObject;
 const coinContainer = document.getElementById('coin-container');
 
-// Fetch data for Search Form selection
-const searchForm = document.getElementById('search-form');
-
+// Fetch data from selected item in dropdown
 const selectedCoinList = document.getElementById('coins-dropdown');
 selectedCoinList.addEventListener('change', handleSelection);
 
 function handleSelection(event) {
   event.preventDefault();  
-  // searchForm.reset();
   // Clear the DOM for each selection
   removeAllChildNodes(coinContainer);
-  // Ignore invalid selection
-  if (event.target.value === undefined) {
-    return;
-  }
 
+  // Capture the input chosen in the dropdown
   const input = selectedCoinList.options[selectedCoinList.selectedIndex];
-
+  // Fetch data from CoinGecko
   fetch(baseURLpre + input.value + baseURLpost)
     .then(response => response.json())
     .then(data => targetAPIData(data))
@@ -37,52 +31,51 @@ function targetAPIData(data) {
   let tickerContainer = [];
   tickerContainer.push(data);
   let targetObj;
-  // Narrow down to the data we want to use
+  // Narrow down to the data we want to use for USD from Binance
   tickerContainer.find(ticker => {
     let obj = ticker.tickers;
     targetObj = obj.filter(e => e.market.name === "Binance");
   });
   targetObject = JSON.parse(JSON.stringify(targetObj[0]));
+  // Callback function that handles displaying data in the DOM
   displayData(targetObject);
 }
 
-// Make it appear on the screen
+
+// Update the coin container, displaying selected coin data
 function displayData(obj) {
-  // Get the coin container that displays selected coin data
-  // Price
-  console.log(obj)
-  // Coin symbol
+  // COIN SYMBOL
   const symbol = document.createElement('span');
   symbol.id = 'symbol';
   symbol.innerText = obj.base;
-  // Price
+  // PRICE
   let price = obj.last;
-  if (price < 1) {
-    price = obj.last;
-  } else {
-    price.toFixed(2);
-  }
   const h2 = document.createElement('h2');
-  h2.id = 'last-price';
+  h2.id = 'price';
+  // Prices over a dollar are shown with 2 numbers after the decimal. 
+  // Otherwise show all numbers after the decimal
+  if (price > parseInt(1)) {
+    price = obj.last.toFixed(2);
+  }
   h2.innerText = `$${price}`;
-  // Name of coin
+  // NAME OF COIN
   const coinName = capitalizeFirstLetter(obj.coin_id);
   const h3 = document.createElement('h3');
   h3.id = 'coin-name';
   h3.innerText = coinName;
-  // Timestamp
+  // TIMESTAMP
   const time = getTimeFromDate(obj.timestamp);
   const timestamp = document.createElement('span');
   timestamp.id = 'time';
   timestamp.innerText = `Price last updated at ${time}`
-  // Link to CoinGecko for this coin
+  // LINK to CoinGecko for this coin
   const coinURL = `https://www.coingecko.com/en/coins/${obj.coin_id}`
   const link = document.createElement('a');
   link.id = 'trade-link';
   link.href = coinURL;
   link.innerText = `Find out more about ${coinName} here!`
   link.target = "_blank"
-  // Add coin data to the container
+  // ADD coin data to the coin container
   coinContainer.append( symbol, h2, h3, timestamp, link );
 }
 
@@ -117,4 +110,3 @@ function getTimeFromDate(timestamp) {
   const minutes = date.getMinutes();
   return `${hours}:${pad(minutes)} ${amOrPm}`
 }
-
