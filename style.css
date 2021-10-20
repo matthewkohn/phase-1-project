@@ -23,7 +23,7 @@ h1#title {
 form#search-form {
   position: relative;
   text-align: center;
-  padding: 50px;
+  padding-bottom: 50px;
   margin-bottom: 50px;
   height: 60px;
   width: auto;
@@ -74,6 +74,7 @@ h2#price {
 h3#coin-name {
   text-transform: uppercase;
   font-size: 36px;
+  margin-top: 0;
 }
 
 span#time {
