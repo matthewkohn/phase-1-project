@@ -17,15 +17,15 @@ function showImage() {
   image.style.width = "200px";
   image.style.maxHeight = "400px";
   image.style.borderRadius = "50%";
+  image.style.boxShadow = "10px 20px 30px rgba(89, 179, 0, 0.5)";
   image.style.opacity = "0.7";
   coinContainer.append(image);
 }
 
-
 // Fetch data from selected item in dropdown
 const selectedCoinList = document.getElementById('coins-dropdown');
 
-selectedCoinList.addEventListener('change', handleSelection);
+setTimeout(selectedCoinList.addEventListener('change', handleSelection), 0);
 
 function handleSelection(event) {
   event.preventDefault();  
@@ -106,7 +106,7 @@ function displayData(obj) {
 function activateLinkButton(e) {
   const elStyle = e.target.style;
   elStyle.backgroundColor = "#000";
-  elStyle.color = "rgba(89, 179, 0.25)"
+  elStyle.color = "rgb(89, 179, 0)"
   elStyle.padding = "20px 60px";
   elStyle.letterSpacing = "2px";
   elStyle.transition = "background-color 1s ease-out, color 1s ease-out, padding 1s ease-in, letter-spacing 1s linear";
