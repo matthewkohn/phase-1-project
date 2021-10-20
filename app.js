@@ -37,10 +37,10 @@ function targetAPIData(data) {
     targetObj = obj.filter(e => e.market.name === "Binance");
   });
   targetObject = JSON.parse(JSON.stringify(targetObj[0]));
+  console.log(targetObject);
   // Callback function that handles displaying data in the DOM
   displayData(targetObject);
 }
-
 
 // Update the coin container, displaying selected coin data
 function displayData(obj) {
@@ -93,7 +93,7 @@ function capitalizeFirstLetter(string) {
 }
 
 // Convert timestamp to readable time for DOM
-// Source: https://stackoverflow.com/questions/40927938/extract-time-from-timestamp-in-js
+// Modified from source: https://stackoverflow.com/questions/40927938/extract-time-from-timestamp-in-js
 function getTimeFromDate(timestamp) {
   const pad = num => ("0" + num).slice(-2);
   // Format from JSON: "2021-10-20T00:04:26+00:00"

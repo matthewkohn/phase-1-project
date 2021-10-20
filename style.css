@@ -63,6 +63,7 @@ div#coin-container {
 
 span#symbol {
   letter-spacing: 2px;
+  font-size: 18px;
 }
 
 h2#price {
