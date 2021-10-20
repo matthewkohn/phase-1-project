@@ -17,7 +17,8 @@
   <main>
     <form id="search-form">
       <select name="coins" id="coins-dropdown">
-        <option value="bitcoin" default>Bitcoin (BTC)</option>
+        <option>Choose a Coin</option>
+        <option value="bitcoin">Bitcoin (BTC)</option>
         <option value="ethereum">Ethereum (ETH)</option>
         <option value="binancecoin">Binance Coin (BNC)</option>
         <option value="cardano">Cardano (ADA)</option>
@@ -36,8 +37,8 @@
 
 
       </select>
-      <input type="text" name="name" id="search-input">
-      <input type="submit" value="Submit">
+      <!-- <input type="text" name="name" id="search-input"> -->
+      <!-- <input type="submit" value="Submit"> -->
     </form>
     <div id="coin-container"></div>
   </main>
@@ -45,7 +46,7 @@
     <!-- API credit -->
     <span>Powered by 
       <a href="https://www.coingecko.com/en">
-        <img src="https://static.coingecko.com/s/coingecko-branding-guide-4f5245361f7a47478fa54c2c57808a9e05d31ac7ca498ab189a3827d6000e22b.png" alt="" width="150px" height="40px">
+        <img src="https://static.coingecko.com/s/coingecko-branding-guide-4f5245361f7a47478fa54c2c57808a9e05d31ac7ca498ab189a3827d6000e22b.png" alt="CoinGecko Logo Image" id="logo" target="_blank">
       </a>
     </span>
   </footer>
