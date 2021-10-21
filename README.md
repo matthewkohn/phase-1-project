@@ -2,6 +2,8 @@
 ## Crypto Tracker App
 A single page application that displays on-the-fly crypto prices
 
+![CryptoGenie Demo Gif](media/cryptoGenieDemo.gif)
+
 ### User Story:
 - “As a user, when I open the page I’d like to see price information on bitcoin by default”
 - “As a user, I want to be able to view price information of the crypto I select/input”

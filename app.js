@@ -3,24 +3,11 @@
 const baseURLpre = 'https://api.coingecko.com/api/v3/coins/';
 const baseURLpost = '/tickers?fields=market';
 // const coinsListURL = 'https://api.coingecko.com/api/v3/coins/cardano/tickers/binance';
+
 // Global target object & coin container
 let targetObject;
 const coinContainer = document.getElementById('coin-container');
-
-// LOAD IMAGE FOR BLANK COIN CONTAINER
 const imageURL = 'https://images.unsplash.com/photo-1515879128292-964efc3ebb25?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=327&q=80';
-document.addEventListener('DOMContentLoaded', showImage);
-
-function showImage() {
-  const image = document.createElement('img');
-  image.src= imageURL;
-  image.style.width = "200px";
-  image.style.maxHeight = "400px";
-  image.style.borderRadius = "50%";
-  image.style.boxShadow = "10px 20px 30px rgba(89, 179, 0, 0.5)";
-  image.style.opacity = "0.7";
-  coinContainer.append(image);
-}
 
 // Fetch data from selected item in dropdown
 const selectedCoinList = document.getElementById('coins-dropdown');
@@ -31,21 +18,21 @@ function handleSelection(event) {
   event.preventDefault();  
   // Clear the DOM for each selection
   removeAllChildNodes(coinContainer);
-
+  
   // Capture the input chosen in the dropdown
   const input = selectedCoinList.options[selectedCoinList.selectedIndex];
   // Fetch data from CoinGecko
   if (input.value === "default") {
     return showImage();
   }
-
+  
   fetch(baseURLpre + input.value + baseURLpost)
-    .then(response => response.json())
-    .then(data => targetAPIData(data))
-    .catch(error => console.log(error))
+  .then(response => response.json())
+  .then(data => targetAPIData(data))
+  .catch(error => console.log(error))
 }
 
-  // Handle target data and store in targetObject
+// Handle target data and store in targetObject
 function targetAPIData(data) {
   // Push the json object to tickerContainer
   let tickerContainer = [];
@@ -101,6 +88,19 @@ function displayData(obj) {
   coinContainer.append( symbol, h2, h3, timestamp, link );
 }
 
+// LOAD IMAGE FOR BLANK COIN CONTAINER
+document.addEventListener('DOMContentLoaded', showImage);
+
+function showImage() {
+  const image = document.createElement('img');
+  image.src= imageURL;
+  image.style.width = "200px";
+  image.style.maxHeight = "400px";
+  image.style.borderRadius = "50%";
+  image.style.boxShadow = "10px 20px 30px rgba(89, 179, 0, 0.5)";
+  image.style.opacity = "0.7";
+  coinContainer.append(image);
+}
 
 // Change styling of link button when cursor hovers over it
 function activateLinkButton(e) {
