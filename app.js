@@ -9,6 +9,9 @@ let targetObject;
 const coinContainer = document.getElementById('coin-container');
 const imageURL = 'https://images.unsplash.com/photo-1515879128292-964efc3ebb25?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=327&q=80';
 
+// LOAD IMAGE FOR BLANK COIN CONTAINER
+document.addEventListener('DOMContentLoaded', showImage);
+
 // Fetch data from selected item in dropdown
 const selectedCoinList = document.getElementById('coins-dropdown');
 
@@ -88,9 +91,7 @@ function displayData(obj) {
   coinContainer.append( symbol, h2, h3, timestamp, link );
 }
 
-// LOAD IMAGE FOR BLANK COIN CONTAINER
-document.addEventListener('DOMContentLoaded', showImage);
-
+// Function for displaying default image when DOM Content Loads
 function showImage() {
   const image = document.createElement('img');
   image.src= imageURL;

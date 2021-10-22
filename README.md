@@ -4,7 +4,7 @@ A single page application that displays on-the-fly crypto prices
 
 ![CryptoGenie Demo Gif](media/cryptoGenieDemo.gif)
 
-## Visit [CryptoGenie Demo](https://matthewkohn.github.io/phase-1-project/) to try it out yourself! 
+## Visit the [CryptoGenie Demo](https://matthewkohn.github.io/phase-1-project/) to try it out yourself! 
 
 ### User Story:
 - “As a user, I want to be able to view price information of the crypto I select/input”
@@ -12,10 +12,9 @@ A single page application that displays on-the-fly crypto prices
 ### MVP:
 - Use json data from coinGecko.com to display the current price of a crypto that has been selected in the DOM
 
-### Future Build-out Opportunities
+### Future Build-out Opportunities:
 - Store user input for coins they own and use the price data from the API to display the users assets for each coin saved
 - Find and display coin metrics, such as volume, price increase/decrease for different time periods
-- 
 
 
 
