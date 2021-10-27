@@ -12,10 +12,21 @@ const imageURL = 'https://images.unsplash.com/photo-1515879128292-964efc3ebb25?i
 // LOAD IMAGE FOR BLANK COIN CONTAINER
 document.addEventListener('DOMContentLoaded', showImage);
 
+
+function displayFetch() {
+  fetch('https://api.coingecko.com/api/v3/coins/bitcoin')
+  .then(response => response.json())
+  .then(data => console.log(data.description.en))
+}
+displayFetch();
+
+
+
+
 // Fetch data from selected item in dropdown
 const selectedCoinList = document.getElementById('coins-dropdown');
 
-setTimeout(selectedCoinList.addEventListener('change', handleSelection), 0);
+// selectedCoinList.addEventListener('change', handleSelection);
 
 function handleSelection(event) {
   event.preventDefault();  
@@ -31,6 +42,7 @@ function handleSelection(event) {
   
   fetch(baseURLpre + input.value + baseURLpost)
   .then(response => response.json())
+  // .then(data => console.log(data))
   .then(data => targetAPIData(data))
   .catch(error => console.log(error))
 }
@@ -40,17 +52,32 @@ function targetAPIData(data) {
   // Push the json object to tickerContainer
   let tickerContainer = [];
   tickerContainer.push(data);
-  let targetObj;
+ 
   // Narrow down to the data we want to use for USD from Binance
   tickerContainer.find(ticker => {
-    let obj = ticker.tickers;
-    targetObj = obj.filter(e => e.market.name === "Binance");
+    let targetObject = ticker.tickers[0];
+    displayData(targetObject);
   });
-  targetObject = JSON.parse(JSON.stringify(targetObj[0]));
-  console.log(targetObject);
-  // Callback function that handles displaying data in the DOM
-  displayData(targetObject);
 }
+
+function dynamicDropdown() {
+  let form = document.getElementById('search-form');
+  let dropdown = document.createElement('select');
+  dropdown.id = 'coins-dropdown'
+  
+  let valueArray = ['bitcoin', 'ethereum', 'binancecoin', 'cardano', 'ripple', 'solana', 'polkadot', 'dogecoin', 'shibainu', ''];
+  
+  valueArray.map(val => {
+    let option = document.createElement('option');
+    option.value = val;
+    option.innerText = capitalizeFirstLetter(val);
+    dropdown.appendChild(option);
+  })
+  
+  form.appendChild(dropdown);
+
+}
+dynamicDropdown();
 
 // Update the coin container, displaying selected coin data
 function displayData(obj) {
@@ -64,10 +91,10 @@ function displayData(obj) {
   h2.id = 'price';
   // Prices over a dollar are shown with 2 numbers after the decimal. 
   // Otherwise show all numbers after the decimal
-  if (price > parseInt(1)) {
+  if (price > 1) {
     price = obj.last.toFixed(2);
   }
-  h2.innerText = `$${price}`;
+  h2.innerText = `$${price}`; 
   // NAME OF COIN
   const coinName = capitalizeFirstLetter(obj.coin_id);
   const h3 = document.createElement('h3');
@@ -93,6 +120,7 @@ function displayData(obj) {
 
 // Function for displaying default image when DOM Content Loads
 function showImage() {
+  dynamicDropdown();
   const image = document.createElement('img');
   image.src= imageURL;
   image.style.width = "200px";
