@@ -7,48 +7,33 @@
   <link rel="stylesheet" href="./style.css">
   <title>Crypto Genie</title>
 </head>
+
 <body>
   <header>
-    <div>
       <h1 id="title">Crypto Genie</h1>
-    </div>
   </header>
   
   <main>
-    <div id="search-form">
+    <section id="dropdown-container">
       <p class="instructions">Choose one of the most popular Cryptocurrencies HERE to see how much it's worth</p>
-      <!-- <select name="coins" id="coins-dropdown"> -->
-        <!-- <option value="default" id="default-label">Choose a Coin</option>
-        <option value="bitcoin">Bitcoin (BTC)</option>
-        <option value="ethereum">Ethereum (ETH)</option>
-        <option value="binancecoin">Binance Coin (BNC)</option>
-        <option value="cardano">Cardano (ADA)</option>
-        <option value="ripple">Ripple (XRP)</option>
-        <option value="solana">Solana (SOL)</option>
-        <option value="polkadot">Polkadot (DOT)</option>
-        <option value="dogecoin">Dogecoin (DOGE)</option>
-        <option value="shiba-inu">Shiba Inu (SHIB)</option>
-        <option value="litecoin">Litecoin (LTC)</option>
-        <option value="chainlink">Chainlink (LINK)</option>
-        <option value="algorand">Algorand (ALGO)</option>
-        <option value="stellar">Stellar (XLM)</option>
-        <option value="cosmos">Cosmos (ATOM)</option>
-        <option value="vechain">VeChain (VET)</option>
-        <option value="internet-computer">Internet Computer (ICP)</option> -->
-      <!-- </select> -->
+      <!-- Dropdown loads in JavaScript here -->
+      <div id="dropdown-target"></div>
       <p class="instructions">Prices are displayed in $USD</p>
-    </div>
-    <div id="coin-container"></div>
+    </section>
+
+    <!-- Coin container loads here -->
+    <section id="coin-container"></section>
   </main>
 
   <footer>
-    <!-- API credit -->
+    <!-- API credit & link to CoinGecko's main page -->
     <span id="footer-span">Powered by 
       <a href="https://www.coingecko.com/en">
         <img src="https://static.coingecko.com/s/coingecko-branding-guide-4f5245361f7a47478fa54c2c57808a9e05d31ac7ca498ab189a3827d6000e22b.png" alt="CoinGecko Logo Image" id="logo" target="_blank">
       </a>
     </span>
   </footer>
+  
   <script src="./app.js"></script>
 </body>
 </html>
