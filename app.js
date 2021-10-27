@@ -18,24 +18,29 @@ function loadStartScreen() {
 }
 
 function loadDropdown() {
-  
+  const dropdownContainer = document.getElementById('dropdown-container');
+  const dropdownTarget = document.getElementById('dropdown-target');
+  dropdownTarget.append(dynamicDropdown());
 }
 
+// Create and return the Dropdown Menu
 function dynamicDropdown() {
-  let form = document.getElementById('search-form');
-  let dropdown = document.createElement('select');
+  const dropdown = document.createElement('select');
   dropdown.id = 'coins-dropdown'
   
-  let valueArray = ['bitcoin', 'ethereum', 'binancecoin', 'cardano', 'ripple', 'solana', 'polkadot', 'dogecoin', 'shibainu', ''];
+  // Array of top coins by market value
+  const topCoinsIdArray = ['bitcoin', 'ethereum', 'binancecoin', 'cardano', 'ripple', 'solana', 'polkadot', 'dogecoin', 'shibainu'];
   
-  valueArray.map(val => {
-    let option = document.createElement('option');
+
+  // Iterate through topCoinsIdArray to turn each item into an Option element and append to Dropdown.
+  topCoinsIdArray.map((val, i) => {
+    const option = document.createElement('option');
     option.value = val;
-    option.innerText = capitalizeFirstLetter(val);
+    option.innerText = (i + 1) + ". " + capitalizeFirstLetter(val);
     dropdown.appendChild(option);
-  })
-  
-  form.appendChild(dropdown);
+  });
+  return dropdown;
+  // form.appendChild(dropdown);
 
 }
 dynamicDropdown();
