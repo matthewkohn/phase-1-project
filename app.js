@@ -1,73 +1,64 @@
-/*---------------- GLOBAL VARIABLES -------------------------
-API docs: https://www.coingecko.com/en/api/documentation */
-const apiURL = 'https://api.coingecko.com/api/v3/coins/bitcoin'
+/*------------------------------- GLOBAL VARIABLES -------------------------*/
+// API docs: https://www.coingecko.com/en/api/documentation
+
+// Used inside dynamicDropdown() and the apiURL
+let optionValue;
 let targetObject;
 
 // Coin Container
 const coinContainer = document.getElementById('coin-container');
+// The select element created in dynamicDropdown() when loadDropdown() is called on DOMContentLoaded
+const dropdownMenu = document.getElementById('coins-dropdown');
 
 
-/*----------------- LOAD IMAGE FOR BLANK COIN CONTAINER ---------------*/
-const imageURL = 'https://images.unsplash.com/photo-1515879128292-964efc3ebb25?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=327&q=80';
+/*--------------------------- LOADING PAGE ---------------------------------*/
 
+// Display the dropdown and default images when DOM Content Loads
 document.addEventListener('DOMContentLoaded', loadStartScreen);
-// Display dropdown and default image when DOM Content Loads
 function loadStartScreen() {
+  // URLs
+  const stockImageURL = 'https://images.unsplash.com/photo-1515879128292-964efc3ebb25?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=327&q=80';
+  const coingeckoImgURL = 'https://static.coingecko.com/s/coingecko-branding-guide-4f5245361f7a47478fa54c2c57808a9e05d31ac7ca498ab189a3827d6000e22b.png';
+  const coingeckoLink = document.getElementById('coingecko-link');
+
+  // Loads the dropdown menu
   loadDropdown();
-  loadImage(imageURL, 'placeholder-image');
+  // Loads a stock image inside the Coin Container until a coin is chosen from the dropdown.
+  loadImage(stockImageURL, 'placeholder-image', 'Green bottle on the edge of a sandy beach.', coinContainer);
+  // Loads Coingecko logo at the footer inside a link element
+  loadImage(coingeckoImgURL, 'logo', 'Coingecko logo.', coingeckoLink);
 }
 
+// Function to load the dropdown menu
 function loadDropdown() {
-  const dropdownContainer = document.getElementById('dropdown-container');
   const dropdownTarget = document.getElementById('dropdown-target');
   dropdownTarget.append(dynamicDropdown());
 }
 
-// Create and return the Dropdown Menu
+// Function to create and return the Dropdown Menu
 function dynamicDropdown() {
   const dropdown = document.createElement('select');
   dropdown.id = 'coins-dropdown'
-  
   // Array of top coins by market value
-  const topCoinsIdArray = ['bitcoin', 'ethereum', 'binancecoin', 'cardano', 'ripple', 'solana', 'polkadot', 'dogecoin', 'shibainu'];
+  const topCoinsIdArray = ['CHOOSE A COIN', 'bitcoin', 'ethereum', 'binancecoin', 'tether', 'cardano', 'solana', 'ripple', 'polkadot', 'shibainu', 'dogecoin', 'terra', 'avalanche', 'chainlink', 'uniswap', 'litecoin', 'polygon', 'algorand', 'cosmos', 'bitcoincash', 'stellar'];
   
-
   // Iterate through topCoinsIdArray to turn each item into an Option element and append to Dropdown.
   topCoinsIdArray.map((val, i) => {
     const option = document.createElement('option');
-    option.value = val;
-    option.innerText = (i + 1) + ". " + capitalizeFirstLetter(val);
+    option.value = optionValue = val;
+    option.innerText = `${i}. ${capitalizeFirstLetter(val)}`;
     dropdown.appendChild(option);
   });
   return dropdown;
-  // form.appendChild(dropdown);
-
-}
-dynamicDropdown();
-/*------------------------- Re-usable Functions -----------------------*/
-function loadImage(url, assignID) {
-  const image = document.createElement('img');
-  image.src = url;
-  image.id = assignID;
-  coinContainer.append(image);
 }
 
-// Fetch data from CoinGecko API, assigning "targetObject" the API data's json info
-function fetchTargetData() {
-  fetch(apiURL)
-  .then(response => response.json())
-  .then(data => targetObject = data)
-  .catch(error => console.log(error));
-}
-fetchTargetData();
 
 
-
+/*----------------------------- MAIN FUNCTIONS -------------------------*/
 
 // Fetch data from selected item in dropdown
-const dropdownMenu = document.getElementById('dropdown-target');
 
-// selectedCoinList.addEventListener('change', handleSelection);
+dropdownMenu.addEventListener('change', handleDropdownSelection);
 
 function handleDropdownSelection(event) {
   event.preventDefault();  
@@ -75,26 +66,56 @@ function handleDropdownSelection(event) {
   removeAllChildNodes(coinContainer);
   
   // Capture the input chosen in the dropdown
-  const input = selectedCoinList.options[selectedCoinList.selectedIndex];
+  // const input = selectedCoinList.options[selectedCoinList.selectedIndex];
   // Fetch data from CoinGecko
-  if (input.value === "default") {
-    return showImage();
+  if (optionValue === "CHOOSE A COIN") {
+    loadImage(stockImageURL, 'placeholder-image', 'Green bottle on the edge of a sandy beach.', coinContainer);
+  } else {
+    fetchTargetData();
+    displayData(targetObject);
   }
   
 }
 
-// Handle target data and store in targetObject
-function targetAPIData(data) {
-  // Push the json object to tickerContainer
-  let tickerContainer = [];
-  tickerContainer.push(data);
- 
-  // Narrow down to the data we want to use for USD from Binance
-  tickerContainer.find(ticker => {
-    let targetObject = ticker.tickers[0];
-    displayData(targetObject);
-  });
+
+// Fetch promises to GET data in JSON form once its promise to get a response from the API is successful
+function fetchTargetData() {
+  // Dynamic URL based on the Value selected in the Dropdown.
+  const apiURL = `https://api.coingecko.com/api/v3/coins/${optionValue}`;
+  fetch(apiURL)
+  .then(response => response.json())
+  .then(data => targetObject = data)
+  .catch(error => console.log(error));
 }
+
+/*------------------------- Re-usable Functions -----------------------*/
+function loadImage(url, assignID, alt, appendTarget) {
+  const image = document.createElement('img');
+  image.src = url;
+  image.id = assignID;
+  image.alt = alt;
+  appendTarget.append(image);
+  return image;
+}
+
+
+
+
+
+
+
+// // Handle target data and store in targetObject
+// function targetAPIData(data) {
+//   // Push the json object to tickerContainer
+//   let tickerContainer = [];
+//   tickerContainer.push(data);
+ 
+//   // Narrow down to the data we want to use for USD from Binance
+//   tickerContainer.find(ticker => {
+//     let targetObject = ticker.tickers[0];
+//     displayData(targetObject);
+//   });
+// }
 
 
 // Update the coin container, displaying selected coin data

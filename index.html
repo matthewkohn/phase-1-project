@@ -16,7 +16,7 @@
   <main>
     <!-- Dropdown section -->
     <section id="dropdown-container">
-      <p class="instructions">Choose one of the most popular Cryptocurrencies HERE</p>
+      <p class="instructions">Choose one of the top 20 Cryptocurrencies</p>
       <!-- Dropdown loads in JavaScript here -->
       <div id="dropdown-target"></div>
       <p class="instructions">Prices are displayed in $USD</p>
@@ -27,11 +27,9 @@
   </main>
 
   <footer>
-    <!-- API credit & link to CoinGecko's main page -->
+    <!-- API credit & link to CoinGecko's main page. Logo is loaded into DOM on load in JavaScript -->
     <span id="footer-span">Powered by 
-      <a href="https://www.coingecko.com/en">
-        <img src="https://static.coingecko.com/s/coingecko-branding-guide-4f5245361f7a47478fa54c2c57808a9e05d31ac7ca498ab189a3827d6000e22b.png" alt="CoinGecko Logo Image" id="logo" target="_blank">
-      </a>
+      <a href="https://www.coingecko.com/en" id="coingecko-link" target="_blank"></a>
     </span>
   </footer>
 
