@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@700&family=Saira:ital@1&display=swap');
 
+html {
+  font-size: 100%;
+}
+
 body {
   background-color: lightcyan;
   font-family: "Lato", sans-serif;
@@ -16,9 +20,9 @@ footer {
 
 h1#title {
   color: lightcyan;
-  font-size: 4rem;
+  font-size: calc(1.3rem + 3.6vw);
   margin-top: 0;
-  padding-top: 20px;
+  padding: 1.4rem;
 }
 
 /* -------------------Dropdown section------------------ */
@@ -41,7 +45,7 @@ section#dropdown-container {
 p.instructions {
   margin: 0;
   padding: 20px;
-  font-size: 1.3rem;
+  font-size: calc(1rem + 1vw);
   color:rgb(89, 179, 0);
 }
 
@@ -85,6 +89,14 @@ section#coin-container {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+img#placeholder-image {
+  width: 200px;
+  max-height: 400px;
+  border-radius: 50%;
+  box-shadow: 10px 20px 30px rgba(89, 179, 0, 0.5);
+  opacity: 0.7;
 }
 
 span#symbol {
