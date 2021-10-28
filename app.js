@@ -35,24 +35,39 @@ function loadDropdown() {
   dropdownTarget.append(dynamicDropdown());
 }
 
-// Function to create and return the Dropdown Menu
+// Functions to create and return the Dropdown Menu
 function dynamicDropdown() {
   const dropdown = document.createElement('select');
   dropdown.id = 'coins-dropdown'
-  // Array of top coins by market value
-  const topCoinsIdArray = ['CHOOSE A COIN', 'bitcoin', 'ethereum', 'binancecoin', 'tether', 'cardano', 'solana', 'ripple', 'polkadot', 'shibainu', 'dogecoin', 'terra', 'avalanche', 'chainlink', 'uniswap', 'litecoin', 'polygon', 'algorand', 'cosmos', 'bitcoincash', 'stellar'];
-  
-  // Iterate through topCoinsIdArray to turn each item into an Option element and append to Dropdown.
-  topCoinsIdArray.map((val, i) => {
-    const option = document.createElement('option');
-    option.value = optionValue = val;
-    option.innerText = `${i}. ${capitalizeFirstLetter(val)}`;
-    dropdown.appendChild(option);
-  });
+  // Function that appends a disabled default option to the top of the dropdown that's being created
+  createDefaultOptionEl(dropdown);
+  // Creates the dropdown options and appends to the dropdown that's being created
+  createRemainingOptionEls(dropdown);
   return dropdown;
 }
 
+function createDefaultOptionEl(dropdownEl) {
+  const defaultOption = document.createElement('option');
+  defaultOption.value = 'default';
+  defaultOption.innerText = 'CHOOSE A COIN';
+  defaultOption.style.fontStyle = 'italic';
+  defaultOption.selected = 'true';
+  defaultOption.disabled = 'disabled';
+  return dropdownEl.appendChild(defaultOption);
+}
 
+function createRemainingOptionEls(dropdownEl) {
+  // Array of top coins by market value
+  const topCoinsIdArray = ['bitcoin', 'ethereum', 'binancecoin', 'tether', 'cardano', 'solana', 'ripple', 'polkadot', 'shibainu', 'dogecoin', 'terra', 'avalanche', 'chainlink', 'uniswap', 'litecoin', 'polygon', 'algorand', 'cosmos', 'bitcoincash', 'stellar'];
+  // Iterate through topCoinsIdArray to turn each item into an Option element and append to Dropdown.
+  topCoinsIdArray.map((val, i) => {
+    const option = document.createElement('option');
+    // Update the iterated option's value and the optionValue variable used inside the apiURL
+    option.value = optionValue = val;
+    option.innerText = `${i + 1}. ${capitalizeFirstLetter(val)}`;
+    dropdownEl.appendChild(option);
+  });
+}
 
 /*----------------------------- MAIN FUNCTIONS -------------------------*/
 
