@@ -69,12 +69,12 @@ select#coins-dropdown:focus {
   background-color: rgba(89, 179, 0, 0.45);
 }
 
-select#coins-dropdown option {
+select#coins-dropdown .option-item {
   background-color: rgba(77, 124, 29, 0.65);
   color: #fff;
 }
 
-option#default-label {
+#default-label {
   font-style: italic;
 }
 
