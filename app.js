@@ -6,7 +6,12 @@
 const coinContainer = document.getElementById('coin-container');
 
 // Display the dropdown and default images when DOM Content Loads
-document.addEventListener('DOMContentLoaded', loadStartScreen);
+document.addEventListener('DOMContentLoaded', function() {
+  // Creates Dropdown & default page features
+  loadStartScreen();
+  // Adds event listener to Dropdown
+  dropdownEvent();
+});
 
 function loadStartScreen() {
   // URLs
@@ -38,6 +43,7 @@ function createDropdown() {
   return dropdown;
 }
 
+// Creates Default Option element
 function createDefaultOptionEl(dropdownEl) {
   const defaultOption = document.createElement('option');
   defaultOption.value = 'default';
@@ -48,9 +54,10 @@ function createDefaultOptionEl(dropdownEl) {
   return dropdownEl.appendChild(defaultOption);
 }
 
+// Creates Crypto Coin Options and attaches to Dropdown El
 function createRemainingOptionEls(dropdownEl) {
   // Array of top coins by market value
-  const topCoinsIdArray = ['bitcoin', 'ethereum', 'binancecoin', 'tether', 'cardano', 'solana', 'ripple', 'polkadot', 'shibainu', 'dogecoin', 'terra', 'avalanche', 'chainlink', 'uniswap', 'litecoin', 'polygon', 'algorand', 'cosmos', 'bitcoincash', 'stellar'];
+  const topCoinsIdArray = ['bitcoin', 'ethereum', 'binancecoin', 'tether', 'cardano', 'solana', 'ripple', 'polkadot', 'shiba-inu', 'dogecoin', 'terra-luna', 'avalanche-2', 'chainlink', 'uniswap', 'litecoin', 'matic-network', 'algorand', 'cosmos', 'bitcoin-cash', 'stellar'];
   // Iterate through topCoinsIdArray to turn each item into an Option element and append to Dropdown.
   topCoinsIdArray.map((value, index) => {
     const option = document.createElement('option');
@@ -63,45 +70,40 @@ function createRemainingOptionEls(dropdownEl) {
 
 /*----------------------------- DROPDOWN API FUNCTIONALITY -------------------------*/
 
-// Fetch data from selected item in dropdown
-let targetObject;
-const dropdownMenu = document.getElementById('coins-dropdown');
+// Event listener assigned on DOMContentLoaded after Dropdown is created
+function dropdownEvent() {
+  const dropdownMenu = document.getElementById('coins-dropdown');
+  dropdownMenu.addEventListener('change', handleDropdownSelection);
+}
 
-// dropdownMenu.addEventListener('change', function() {
-//   return console.log('Whats up dude');
-// });
-
-// function handleDropdownSelection(event) {
-//   event.preventDefault();  
-//   // Clear the DOM for each selection
-//   removeAllChildNodes(coinContainer);
+function handleDropdownSelection(event) {
+  event.preventDefault();  
+  // Clear the DOM for each selection
+  removeAllChildNodes(coinContainer);
   
-//   // Capture the input chosen in the dropdown
-//   // const input = selectedCoinList.options[selectedCoinList.selectedIndex];
-//   // Fetch data from CoinGecko
-//   fetchTargetData();
-//   // displayData(targetObject);
-//   if (optionValue === 'default') {
-//     loadImage(stockImageURL, 'placeholder-image', 'Green bottle on the edge of a sandy beach.', coinContainer);
-//   } else {
-//   }
-  
-// }
+  const targetVal = event.target.value;
 
+  fetchTargetData(targetVal);
+  
+}
 
 // Fetch promises to GET data in JSON form once its promise to get a response from the API is successful
-// function fetchTargetData() {
-//   // Dynamic URL based on the Value selected in the Dropdown.
-//   const apiURL = `https://api.coingecko.com/api/v3/coins/${optionValue}`;
-//   fetch(apiURL)
-//   .then(response => response.json())
-//   .then(data => targetObject = data)
-//   .catch(error => console.log(error));
-// }
+function fetchTargetData(target) {
+  // Dynamic URL based on the Value selected in the Dropdown.
+  const apiURL = `https://api.coingecko.com/api/v3/coins/${target}`;
+  // const apiURL = `https://api.coingecko.com/api/v3/coins/bitcoin`;
+  fetch(apiURL)
+    .then(response => response.json())
+    .then(data => displayData(data))
+    .catch(error => console.log(error));
+  // console.log(targetObject)
+}
 
 
 
-
+function displayData(data) {
+  console.log(data);
+}
 
 
 
