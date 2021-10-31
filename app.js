@@ -1,7 +1,6 @@
 // API docs: https://www.coingecko.com/en/api/documentation
 
-/*--------------------------- LOADING PAGE ---------------------------------*/
-
+/*---------------- LOADING PAGE ------------------*/
 // Global Coin Container variable used in load, fetch, and to append elements created using API data
 const coinContainer = document.getElementById('coin-container');
 
@@ -15,27 +14,20 @@ function init() {
   loadStartImages();
 }
 
-/*------------------------------------------- FETCH DATA ----------------------------------*/
+/*----------------- FETCH DATA ---------------------*/
 // Fetch to Coingecko, requesting real-time data on top 100 cryptocurrencies
 function fetchCoinList() {
   const apiURL = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_rank&per_page100&page=1&sparkline=false';
   fetch(apiURL)
     .then(response => response.json())
-    .then(topCryptoData => {
-      console.log(topCryptoData)
-      // Create & populate the dropdown element with current Top 100 cypto options
-      createDropdown(topCryptoData);
-      // Pass data to Coin Container display when option is selected
-      // displaySelectedData(topCryptoData);
-    })
+    .then(topCryptoData => createDropdown(topCryptoData))
     .catch(error => {
       console.log(error);
       // displayErrorMessage();
     })
-}
-
-/*---------------------------------------------- LOAD START IMAGES --------------------------*/
-// Loads default images on DOMContentLoaded
+  }
+  
+/*---------------- LOAD START IMAGES ---------------*/
 function loadStartImages() {
   const stockImageURL = 'https://images.unsplash.com/photo-1515879128292-964efc3ebb25?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=327&q=80';
   const coingeckoImgURL = 'https://static.coingecko.com/s/coingecko-branding-guide-4f5245361f7a47478fa54c2c57808a9e05d31ac7ca498ab189a3827d6000e22b.png';
@@ -46,7 +38,7 @@ function loadStartImages() {
   loadImage(coingeckoImgURL, 'logo', 'Coingecko logo.', coingeckoLink);
 }
 
-/*--------------------------------- DROPDOWN CREATION & FUNCTIONALITY ----------------------------*/
+/*----------- DROPDOWN CREATION & FUNCTIONALITY -------------*/
 
 function createDropdown(data) {
   const dropdownTarget = document.getElementById('dropdown-target');
@@ -57,6 +49,7 @@ function createDropdown(data) {
   // Creates the dropdown options and appends to the dropdown that's being created
   createTopOptions(dropdown, data);
   dropdownTarget.append(dropdown);
+  dropdown.addEventListener('change', e => handleDropdownSelection(e, data));
 }
 
 // Creates Default Option element
@@ -94,32 +87,46 @@ function createTopOptions(dropdownEl, fetchData) {
   });
 }
 
+
+
+
+
+
+/*-------------- DROPDOWN EVENT LISTENER ---------------*/
+function handleDropdownSelection(event, apiData) {
+  // Prevent default & capture target value
+  event.preventDefault();  
+  const targetValue = event.target.value;
+  // Clear the DOM for each selection
+  removeAllChildNodes(coinContainer);
+  // Display the selected cryptocurrency's data in the DOM
+  displayData(apiData, targetValue);
+  // console.log(apiData);
+}
+
+// Function to clear the Coin Container in the DOM:
+function removeAllChildNodes(parent) {
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);
+  }
+}
+
+function displayData(apiData, selectedValue) {
+  // Find the selectedValue inside apiData
+  const selectedCoin = 
+  console.log(apiData);
+  console.log(selectedValue);
+}
+
 /*----------------------------- DROPDOWN API FUNCTIONALITY -------------------------*/
 
 // Event listener assigned on DOMContentLoaded after Dropdown is created
-function dropdownEvent() {
-  const dropdownMenu = document.getElementById('coins-dropdown');
-  dropdownMenu.addEventListener('change', handleDropdownSelection);
-}
+// function dropdownEvent() {
+//   const dropdownMenu = document.getElementById('coins-dropdown');
+//   dropdownMenu.addEventListener('change', handleDropdownSelection);
+// }
 
-function handleDropdownSelection(event) {
-  event.preventDefault();  
-  // Clear the DOM for each selection
-  removeAllChildNodes(coinContainer);
-  
-  const targetVal = event.target.value;
-  
-  fetchTargetData(targetVal);
-  
-}
-
-
-
-function displayData(data) {
-  console.log(data);
-}
-
-
+// displaySelectedData
 
 
 // // Handle target data and store in targetObject
@@ -185,13 +192,6 @@ function loadImage(url, assignID, alt, appendTarget) {
   image.alt = alt;
   appendTarget.append(image);
   return image;
-}
-
-// Function to clear the Coin Container in the DOM:
-function removeAllChildNodes(parent) {
-  while (parent.firstChild) {
-    parent.removeChild(parent.firstChild);
-  }
 }
 
 // Capitalize name of coin function
