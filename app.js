@@ -6,64 +6,90 @@
 const coinContainer = document.getElementById('coin-container');
 
 // Display the dropdown and default images when DOM Content Loads
-document.addEventListener('DOMContentLoaded', function() {
-  // Creates Dropdown & default page features
-  loadStartScreen();
-  // Adds event listener to Dropdown
-  dropdownEvent();
-});
+document.addEventListener('DOMContentLoaded', init);
 
-function loadStartScreen() {
-  // URLs
+function init() {
+  // Fetch data from CoinGecko API, passing data to load Dropdown & populate DOM with selected option data
+  fetchCoinList();
+  // Creates Dropdown & default page features
+  loadStartImages();
+}
+
+/*------------------------------------------- FETCH DATA ----------------------------------*/
+// Fetch to Coingecko, requesting real-time data on top 100 cryptocurrencies
+function fetchCoinList() {
+  const apiURL = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_rank&per_page100&page=1&sparkline=false';
+  fetch(apiURL)
+    .then(response => response.json())
+    .then(topCryptoData => {
+      console.log(topCryptoData)
+      // Create & populate the dropdown element with current Top 100 cypto options
+      createDropdown(topCryptoData);
+      // Pass data to Coin Container display when option is selected
+      // displaySelectedData(topCryptoData);
+    })
+    .catch(error => {
+      console.log(error);
+      // displayErrorMessage();
+    })
+}
+
+/*---------------------------------------------- LOAD START IMAGES --------------------------*/
+// Loads default images on DOMContentLoaded
+function loadStartImages() {
   const stockImageURL = 'https://images.unsplash.com/photo-1515879128292-964efc3ebb25?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=327&q=80';
   const coingeckoImgURL = 'https://static.coingecko.com/s/coingecko-branding-guide-4f5245361f7a47478fa54c2c57808a9e05d31ac7ca498ab189a3827d6000e22b.png';
-  const coingeckoLink = document.getElementById('coingecko-link');  
-  // Loads the dropdown menu
-  loadDropdown();
+  const coingeckoLink = document.getElementById('coingecko-link');
   // Loads a stock image inside the Coin Container until a coin is chosen from the dropdown.
   loadImage(stockImageURL, 'placeholder-image', 'Green bottle on the edge of a sandy beach.', coinContainer);
   // Loads Coingecko logo at the footer inside a link element
   loadImage(coingeckoImgURL, 'logo', 'Coingecko logo.', coingeckoLink);
 }
 
-// Function to load the dropdown menu
-function loadDropdown() {
-  const dropdownTarget = document.getElementById('dropdown-target');
-  dropdownTarget.append(createDropdown());
-}
+/*--------------------------------- DROPDOWN CREATION & FUNCTIONALITY ----------------------------*/
 
-// Functions to create and return the Dropdown Menu
-function createDropdown() {
+function createDropdown(data) {
+  const dropdownTarget = document.getElementById('dropdown-target');
   const dropdown = document.createElement('select');
   dropdown.id = 'coins-dropdown';
   // Function that appends a disabled default option to the top of the dropdown that's being created
   createDefaultOptionEl(dropdown);
   // Creates the dropdown options and appends to the dropdown that's being created
-  createRemainingOptionEls(dropdown);
-  return dropdown;
+  createTopOptions(dropdown, data);
+  dropdownTarget.append(dropdown);
 }
 
 // Creates Default Option element
 function createDefaultOptionEl(dropdownEl) {
   const defaultOption = document.createElement('option');
-  defaultOption.value = 'default';
-  defaultOption.innerText = 'CHOOSE A COIN';
-  defaultOption.id = 'default-label';
-  defaultOption.selected = 'true';
-  defaultOption.disabled = 'disabled';
+  Object.assign(defaultOption, {
+    id: 'default-label',
+    value: 'default',
+    textContent: 'CHOOSE A RANKED COIN',
+    selected: 'true',
+    disabled: 'disabled',
+  })
+  // defaultOption.value = 'default';
+  // defaultOption.textContent = 'CHOOSE A COIN';
+  // defaultOption.id = 'default-label';
+  // defaultOption.selected = 'true';
+  // defaultOption.disabled = 'disabled';
   return dropdownEl.appendChild(defaultOption);
 }
 
 // Creates Crypto Coin Options and attaches to Dropdown El
-function createRemainingOptionEls(dropdownEl) {
-  // Array of top coins by market value
-  const topCoinsIdArray = ['bitcoin', 'ethereum', 'binancecoin', 'tether', 'cardano', 'solana', 'ripple', 'polkadot', 'shiba-inu', 'dogecoin', 'terra-luna', 'avalanche-2', 'chainlink', 'uniswap', 'litecoin', 'matic-network', 'algorand', 'cosmos', 'bitcoin-cash', 'stellar'];
-  // Iterate through topCoinsIdArray to turn each item into an Option element and append to Dropdown.
-  topCoinsIdArray.map((value, index) => {
+function createTopOptions(dropdownEl, fetchData) {
+  // console.log(fetchData);
+  // Iterate through fetchData, creating an option element out of each object
+  fetchData.map(data => {
+    // console.log(data);
+    const marketRank = data.market_cap_rank;
+    const name = data.name;
     const option = document.createElement('option');
-    option.value = value;
+    // Using Object.assign() here took elements out of order
+    option.value = data.id;
     option.className = 'option-item';
-    option.innerText = `${index + 1}. ${capitalizeFirstLetter(value)}`;
+    option.textContent = `${marketRank}) ${name}`;
     dropdownEl.appendChild(option);
   });
 }
@@ -82,21 +108,9 @@ function handleDropdownSelection(event) {
   removeAllChildNodes(coinContainer);
   
   const targetVal = event.target.value;
-
+  
   fetchTargetData(targetVal);
   
-}
-
-// Fetch promises to GET data in JSON form once its promise to get a response from the API is successful
-function fetchTargetData(target) {
-  // Dynamic URL based on the Value selected in the Dropdown.
-  const apiURL = `https://api.coingecko.com/api/v3/coins/${target}`;
-  // const apiURL = `https://api.coingecko.com/api/v3/coins/bitcoin`;
-  fetch(apiURL)
-    .then(response => response.json())
-    .then(data => displayData(data))
-    .catch(error => console.log(error));
-  // console.log(targetObject)
 }
 
 
@@ -113,7 +127,7 @@ function displayData(data) {
   //   // Push the json object to tickerContainer
 //   let tickerContainer = [];
 //   tickerContainer.push(data);
- 
+
 //   // Narrow down to the data we want to use for USD from Binance
 //   tickerContainer.find(ticker => {
   //     let targetObject = ticker.tickers[0];
@@ -123,20 +137,20 @@ function displayData(data) {
   
   
   // Update the coin container, displaying selected coin data
-//   function displayData(obj) {
-//     // COIN SYMBOL
-//     const symbol = document.createElement('span');
-//     symbol.id = 'symbol';
-//     symbol.innerText = obj.base;
-//     // PRICE
-//     let price = obj.last;
-//     const h2 = document.createElement('h2');
+  //   function displayData(obj) {
+    //     // COIN SYMBOL
+    //     const symbol = document.createElement('span');
+    //     symbol.id = 'symbol';
+    //     symbol.innerText = obj.base;
+    //     // PRICE
+    //     let price = obj.last;
+    //     const h2 = document.createElement('h2');
 //     h2.id = 'price';
 //     // Prices over a dollar are shown with 2 numbers after the decimal. 
 //     // Otherwise show all numbers after the decimal
 //     if (price > 1) {
-//     price = obj.last.toFixed(2);
-//   }
+  //     price = obj.last.toFixed(2);
+  //   }
 //   h2.innerText = `$${price}`; 
 //   // NAME OF COIN
 //   const coinName = capitalizeFirstLetter(obj.coin_id);
@@ -209,6 +223,16 @@ function formatAMPM(date) {
 
 
 
+// Fetch promises to GET data in JSON form once its promise to get a response from the API is successful
+// function fetchTargetData(target) {
+//   // Dynamic URL based on the Value selected in the Dropdown.
+//   const apiURL = `https://api.coingecko.com/api/v3/coins/${target}`;
+
+//   fetch(apiURL)
+//     .then(response => response.json())
+//     .then(data => displayData(data))
+//     .catch(error => console.log(error));
+// }
 
 // // Change styling of link button when cursor hovers over it
 // function activateLinkButton(e) {
