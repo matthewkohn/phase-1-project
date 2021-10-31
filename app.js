@@ -23,9 +23,17 @@ function fetchCoinList() {
     .then(topCryptoData => createDropdown(topCryptoData))
     .catch(error => {
       console.log(error);
-      // displayErrorMessage();
-    })
-  }
+      displayErrorMessage();
+    });
+}
+
+function displayErrorMessage() {
+  const h2 = document.createElement('h2');
+  const section = document.getElementById('dropdown-container');
+  h2.id = 'dom-error';
+  h2.textContent = "Sorry, the system isn't working right now. Please try again later.";
+  section.append(h2);
+}
   
 /*---------------- LOAD START IMAGES ---------------*/
 function loadStartImages() {
@@ -36,6 +44,15 @@ function loadStartImages() {
   loadImage(stockImageURL, 'placeholder-image', 'Green bottle on the edge of a sandy beach.', coinContainer);
   // Loads Coingecko logo at the footer inside a link element
   loadImage(coingeckoImgURL, 'logo', 'Coingecko logo.', coingeckoLink);
+}
+
+function loadImage(url, assignID, alt, appendTarget) {
+  const image = document.createElement('img');
+  image.src = url;
+  image.id = assignID;
+  image.alt = alt;
+  appendTarget.append(image);
+  return image;
 }
 
 /*----------- DROPDOWN CREATION & FUNCTIONALITY -------------*/
@@ -61,20 +78,14 @@ function createDefaultOptionEl(dropdownEl) {
     textContent: 'CHOOSE A RANKED COIN',
     selected: 'true',
     disabled: 'disabled',
-  })
-  // defaultOption.value = 'default';
-  // defaultOption.textContent = 'CHOOSE A COIN';
-  // defaultOption.id = 'default-label';
-  // defaultOption.selected = 'true';
-  // defaultOption.disabled = 'disabled';
+  });
   return dropdownEl.appendChild(defaultOption);
 }
 
 // Creates Crypto Coin Options and attaches to Dropdown El
-function createTopOptions(dropdownEl, fetchData) {
-  // console.log(fetchData);
+function createTopOptions(dropdownEl, apiData) {
   // Iterate through fetchData, creating an option element out of each object
-  fetchData.map(data => {
+  apiData.map(data => {
     // console.log(data);
     const marketRank = data.market_cap_rank;
     const name = data.name;
@@ -86,9 +97,6 @@ function createTopOptions(dropdownEl, fetchData) {
     dropdownEl.appendChild(option);
   });
 }
-
-
-
 
 
 
@@ -113,9 +121,11 @@ function removeAllChildNodes(parent) {
 
 function displayData(apiData, selectedValue) {
   // Find the selectedValue inside apiData
-  const selectedCoin = 
+  const selectedCoinObj = apiData.find(coin => coin.id === selectedValue);
+
   console.log(apiData);
   console.log(selectedValue);
+  console.log(selectedCoinObj);
 }
 
 /*----------------------------- DROPDOWN API FUNCTIONALITY -------------------------*/
@@ -185,14 +195,7 @@ function displayData(apiData, selectedValue) {
 
 
 /*------------------------- Re-usable Functions -----------------------*/
-function loadImage(url, assignID, alt, appendTarget) {
-  const image = document.createElement('img');
-  image.src = url;
-  image.id = assignID;
-  image.alt = alt;
-  appendTarget.append(image);
-  return image;
-}
+
 
 // Capitalize name of coin function
 // Source: https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript

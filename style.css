@@ -28,16 +28,6 @@ h1#title {
 
 /* -------------------Dropdown section------------------ */
 
-/* form#search-form {
-  position: relative;
-  text-align: center;
-  padding-bottom: 50px;
-  margin-bottom: 50px;
-  height: 80px;
-  width: auto;
-  appearance: none;
-} */
-
 section#dropdown-container {
   height: 20vh;
   min-height: 200px;
@@ -53,6 +43,13 @@ p.instructions {
 
 div#dropdown-target {
   
+}
+
+h2#dom-error {
+  color: red;
+  font-family: 'Saira', monospace;
+  font-size: 1rem;
+  background: lightyellow;
 }
 
 select#coins-dropdown {
@@ -74,7 +71,7 @@ select#coins-dropdown .option-item {
   color: #fff;
 }
 
-#default-label {
+option#default-label {
   font-style: italic;
 }
 
