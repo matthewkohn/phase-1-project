@@ -98,6 +98,11 @@ img#placeholder-image {
   opacity: 0.7;
 }
 
+img#coin-image {
+  width: 100px;
+  height: 100px;
+}
+
 span#symbol {
   letter-spacing: 2px;
   font-size: 18px;

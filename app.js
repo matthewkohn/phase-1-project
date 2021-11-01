@@ -28,8 +28,8 @@ function fetchCoinList() {
 }
 
 function displayErrorMessage() {
-  const h2 = document.createElement('h2');
   const section = document.getElementById('dropdown-container');
+  const h2 = document.createElement('h2');
   h2.id = 'dom-error';
   h2.textContent = "Sorry, the system isn't working right now. Please try again later.";
   section.append(h2);
@@ -48,11 +48,12 @@ function loadStartImages() {
 
 function loadImage(url, assignID, alt, appendTarget) {
   const image = document.createElement('img');
-  image.src = url;
-  image.id = assignID;
-  image.alt = alt;
+  Object.assign(image, {
+    id: assignID,
+    src: url,
+    alt: alt,
+  });
   appendTarget.append(image);
-  return image;
 }
 
 /*----------- DROPDOWN CREATION & FUNCTIONALITY -------------*/
@@ -74,8 +75,8 @@ function createDefaultOptionEl(dropdownEl) {
   const defaultOption = document.createElement('option');
   Object.assign(defaultOption, {
     id: 'default-label',
-    value: 'default',
     textContent: 'CHOOSE A RANKED COIN',
+    value: 'default',
     selected: 'true',
     disabled: 'disabled',
   });
@@ -123,55 +124,123 @@ function displayData(apiData, selectedValue) {
   // Find the selectedValue inside apiData
   const selectedCoinObj = apiData.find(coin => coin.id === selectedValue);
 
+
+  // loadImage(url, assignID, alt, appendTarget) from line 49
+  loadImage(
+    selectedCoinObj.image,
+    'coin-image', 
+    `${selectedCoinObj.name} logo`, 
+    coinContainer);
+
+  const name = createCoinEl('h2', 'coin-name', selectedCoinObj, 'name');
+  console.log(name);
+  
+
   console.log(apiData);
   console.log(selectedValue);
   console.log(selectedCoinObj);
 }
 
+//   // NAME OF COIN
+//   const coinName = obj.coin_id;
+//   const h2 = document.createElement('h2');
+//   h3.id = 'coin-name';
+//   h3.innerText = coinName;
+
+function createCoinEl(tagName, id, coinObj, apiValue) {
+  const element = document.createElement(tagName);
+  Object.assign(element, {
+    id: id,
+    textContent: `${coinObj[apiValue]}`,
+  })
+  return element;
+}
+
+
+/*  symbol  ''
+        span, uppercase
+      name    ''
+        h3, uppercase
+      current_price  $
+        h2, format price
+        
+      high_24h  $
+        span, format price
+      low_24h  $
+        span, format price
+      price_change_24h  $
+        span, format price
+      price_change_percentage_24h  %
+        span, format percentage
+      market_cap_rank   #
+        span, format large number
+      market_cap  $
+        span, format price
+      circulating_supply  #
+        span, format large number
+      total_volume  #
+        span, format large number
+      
+      last_updated  (date)
+        span, format date
+ */
+
+// Formats how prices are displayed
+function formatPrice(coin) {
+  let price = coin.current_price;
+  const h2 = document.createElement('h2');
+  h2.id = 'price';
+  // Prices over a dollar are shown with 2 numbers after the decimal. 
+  // Otherwise show all numbers after the decimal
+  if (price > 1) {
+    price = coin.last.toFixed(2);
+  }
+  // Make large dollar amounts easier to read
+  if (price >= 1000) {
+    formatLargeNumber(price);
+  }
+  h2.textContent = `$${price}`; 
+}
+
+// Adds commas and rounds to the nearest integer for large numbers
+function formatLargeNumber(number) {
+  if (number >= 1000) {
+
+  }
+}
+
+function formatDate(coin) {
+
+}
+
+function formatPercentage(coin) {
+
+}
+
 /*----------------------------- DROPDOWN API FUNCTIONALITY -------------------------*/
 
-// Event listener assigned on DOMContentLoaded after Dropdown is created
-// function dropdownEvent() {
-//   const dropdownMenu = document.getElementById('coins-dropdown');
-//   dropdownMenu.addEventListener('change', handleDropdownSelection);
-// }
-
-// displaySelectedData
-
-
-// // Handle target data and store in targetObject
-// function targetAPIData(data) {
-  //   // Push the json object to tickerContainer
-//   let tickerContainer = [];
-//   tickerContainer.push(data);
-
-//   // Narrow down to the data we want to use for USD from Binance
-//   tickerContainer.find(ticker => {
-  //     let targetObject = ticker.tickers[0];
-  //     displayData(targetObject);
-  //   });
-  // }
-  
   
   // Update the coin container, displaying selected coin data
   //   function displayData(obj) {
-    //     // COIN SYMBOL
-    //     const symbol = document.createElement('span');
-    //     symbol.id = 'symbol';
-    //     symbol.innerText = obj.base;
-    //     // PRICE
-    //     let price = obj.last;
-    //     const h2 = document.createElement('h2');
+//     // COIN SYMBOL
+//     const symbol = document.createElement('span');
+//     symbol.id = 'symbol';
+//     symbol.innerText = obj.base;
+
+//     // PRICE
+//     let price = obj.current_price;
+//     const h2 = document.createElement('h2');
 //     h2.id = 'price';
 //     // Prices over a dollar are shown with 2 numbers after the decimal. 
 //     // Otherwise show all numbers after the decimal
 //     if (price > 1) {
   //     price = obj.last.toFixed(2);
   //   }
-//   h2.innerText = `$${price}`; 
+//     h2.innerText = `$${price}`; 
+
 //   // NAME OF COIN
-//   const coinName = capitalizeFirstLetter(obj.coin_id);
-//   const h3 = document.createElement('h3');
+//   const coinName = obj.coin_id;
+//   const h2 = document.createElement('h2');
 //   h3.id = 'coin-name';
 //   h3.innerText = coinName;
 //   // TIMESTAMP
@@ -194,25 +263,27 @@ function displayData(apiData, selectedValue) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 /*------------------------- Re-usable Functions -----------------------*/
-
-
-// Capitalize name of coin function
-// Source: https://stackoverflow.com/questions/1026069/how-do-i-make-the-first-letter-of-a-string-uppercase-in-javascript
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
 
 // Convert timestamp to readable time for DOM
 // Adapted from source: https://stackoverflow.com/questions/40927938/extract-time-from-timestamp-in-js
-function getTimeFromDate(timestamp) {
-  // Format from JSON: "2021-10-20T00:04:26+00:00"
-  const date = new Date(timestamp);
-  return formatAMPM(date);
-}
 
 // Souce: https://stackoverflow.com/questions/8888491/how-do-you-display-javascript-datetime-in-12-hour-am-pm-format
-function formatAMPM(date) {
+function formatAMPM(timestamp) {
+  // Format from JSON: "2021-10-20T00:04:26+00:00"
+  let date = new Date(timestamp);
   let hours = date.getHours();
   let minutes = date.getMinutes();
   let ampm = hours >= 12 ? 'pm' : 'am';
@@ -222,36 +293,4 @@ function formatAMPM(date) {
   let strTime = hours + ':' + minutes + ' ' + ampm;
   return strTime;
 }
-
-
-
-
-// Fetch promises to GET data in JSON form once its promise to get a response from the API is successful
-// function fetchTargetData(target) {
-//   // Dynamic URL based on the Value selected in the Dropdown.
-//   const apiURL = `https://api.coingecko.com/api/v3/coins/${target}`;
-
-//   fetch(apiURL)
-//     .then(response => response.json())
-//     .then(data => displayData(data))
-//     .catch(error => console.log(error));
-// }
-
-// // Change styling of link button when cursor hovers over it
-// function activateLinkButton(e) {
-//   const elStyle = e.target.style;
-//   elStyle.backgroundColor = "#000";
-//   elStyle.color = "rgb(89, 179, 0)"
-//   elStyle.padding = "20px 60px";
-//   elStyle.letterSpacing = "2px";
-//   elStyle.transition = "background-color 1s ease-out, color 1s ease-out, padding 1s ease-in, letter-spacing 1s linear";
-// }
-
-// function deactivateLinkButton(e) {
-//   const elStyle = e.target.style;
-//   elStyle.backgroundColor = "rgb(89, 179, 0)";
-//   elStyle.color = "#fff"
-//   elStyle.padding = "20px 34px";
-//   elStyle.letterSpacing = "normal";
-//   elStyle.transition = "background-color 1s ease-out, color 1s ease-out, padding 1s ease-in, letter-spacing 1s linear";
-// }
+console.log(formatAMPM("2021-10-20T00:04:26+00:00"))
