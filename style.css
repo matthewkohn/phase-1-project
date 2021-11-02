@@ -101,11 +101,13 @@ img#placeholder-image {
 img#coin-image {
   width: 100px;
   height: 100px;
+  
 }
 
 span#symbol {
   letter-spacing: 2px;
   font-size: 18px;
+  text-transform: uppercase;
 }
 
 h2#price {

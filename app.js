@@ -122,127 +122,119 @@ function removeAllChildNodes(parent) {
 
 function displayData(apiData, selectedValue) {
   // Find the selectedValue inside apiData
-  const selectedCoinObj = apiData.find(coin => coin.id === selectedValue);
+  const chosenCoin = apiData.find(coin => coin.id === selectedValue);
 
 
-  // loadImage(url, assignID, alt, appendTarget) from line 49
-  loadImage(
-    selectedCoinObj.image,
+  // loadImage param format: (url, assignClass, alt, appendTarget) from line 49
+  const coinImage = loadImage(
+    chosenCoin.image,
     'coin-image', 
-    `${selectedCoinObj.name} logo`, 
+    `${chosenCoin.name} logo`, 
     coinContainer);
 
-  const name = createCoinEl('h2', 'coin-name', selectedCoinObj, 'name');
-  console.log(name);
   
+  // const elementArray = [ nameEl, symbolEl, priceEl, high24El, low24El, rankEl, marketCapEl, supplyEl, volumeEl ];
 
-  console.log(apiData);
-  console.log(selectedValue);
-  console.log(selectedCoinObj);
+
+  // createCoinEl param format: (tagNameStr, idStr, coinObj, apiValueStr, formatFunc) 
+  const nameEl = createCoinEl(chosenCoin, 'h3', 'coin-name', 'name');
+  const symbolEl = createCoinEl(chosenCoin, 'span', 'symbol', 'symbol');
+
+
+  const priceEl = createCoinEl(chosenCoin, 'h2', 'price', 'current_price');
+  formatPrice(chosenCoin, priceEl, 'current_price');
+  
+  console.log(priceEl);
+  
 }
 
-//   // NAME OF COIN
-//   const coinName = obj.coin_id;
-//   const h2 = document.createElement('h2');
-//   h3.id = 'coin-name';
-//   h3.innerText = coinName;
+// function createMoneyEl(selectedCoin, )
 
-function createCoinEl(tagName, id, coinObj, apiValue) {
-  const element = document.createElement(tagName);
+
+// ELEMENT CREATOR FUNCTION
+function createCoinEl(coinObj, tagNameStr, idStr, apiValueStr) {
+  const element = document.createElement(tagNameStr);
   Object.assign(element, {
-    id: id,
-    textContent: `${coinObj[apiValue]}`,
-  })
+    id: idStr,
+    textContent: `${coinObj[apiValueStr]}`,
+    function: 
+  });
   return element;
 }
 
-
-/*  symbol  ''
-        span, uppercase
-      name    ''
-        h3, uppercase
-      current_price  $
-        h2, format price
-        
-      high_24h  $
-        span, format price
-      low_24h  $
-        span, format price
-      price_change_24h  $
-        span, format price
-      price_change_percentage_24h  %
-        span, format percentage
-      market_cap_rank   #
-        span, format large number
-      market_cap  $
-        span, format price
-      circulating_supply  #
-        span, format large number
-      total_volume  #
-        span, format large number
-      
-      last_updated  (date)
-        span, format date
- */
-
-// Formats how prices are displayed
-function formatPrice(coin) {
-  let price = coin.current_price;
-  const h2 = document.createElement('h2');
-  h2.id = 'price';
+// Formats how prices are displayed in the DOM
+function formatPrice(coinObj, elName, apiValueStr) {
+  let price = coinObj[apiValueStr];
   // Prices over a dollar are shown with 2 numbers after the decimal. 
-  // Otherwise show all numbers after the decimal
-  if (price > 1) {
-    price = coin.last.toFixed(2);
+  if (price >= 1) {
+    price = formatLargeNumber(price);
   }
-  // Make large dollar amounts easier to read
-  if (price >= 1000) {
-    formatLargeNumber(price);
-  }
-  h2.textContent = `$${price}`; 
+  elName.textContent = `$${price}`; 
 }
 
-// Adds commas and rounds to the nearest integer for large numbers
+// const high24El = createCoinEl('span', 'high-24', chosenCoin, 'high_24h');
+// const low24El = createCoinEl('span', 'low-24', chosenCoin, 'low_24h');
+// const marketCapEl = createCoinEl('span', 'market-cap', chosenCoin, 'market_cap');
+
+// const rankEl = createCoinEl('span', 'rank', chosenCoin, 'market_cap_rank');
+// const supplyEl = createCoinEl('span', 'supply', chosenCoin, 'circulating_supply');
+
+// const volumeEl = createCoinEl('span', 'volume', chosenCoin, 'total_volume');
+// formatVolume(volumeEl);
+/*    
+last_updated  (date)
+span, format date
+*/
+// formatPrice(chosenCoin, high24El, 'high_24h');
+  // formatPrice(chosenCoin, low24El, 'low_24h');
+  // formatPrice(chosenCoin, marketCapEl, 'market_cap');
+  // formatPrice(chosenCoin, supplyEl, 'circulating_supply');
+  
+  // console.log(nameEl);
+  // console.log(symbolEl);
+  // console.log(priceEl);
+  // console.log(high24El);
+  // console.log(low24El);
+  // console.log(rankEl);
+  // console.log(marketCapEl);
+  // console.log(supplyEl);
+  // console.log(volumeEl);
+
+  // // console.log(apiData);
+  // console.log(selectedValue);
+  // console.log(chosenCoin);
+
+  
+// Formats the Volume Element
+function formatVolume(volEl) {
+  let volContent = volEl.textContent;
+  volContent = volContent.split('.')
+  volContent[0] = parseInt(volContent, 10);
+  volContent[0] = formatLargeNumber(volContent);
+  return volEl.textContent = volContent[0];
+}
+
+
+// Formats numbers with 2 decimal places and commas as necessary for large numbers
+// used in formatPrice() & formatVolume()
 function formatLargeNumber(number) {
-  if (number >= 1000) {
-
-  }
+  return number.toLocaleString(undefined, { minimumFractionDigits: 2 } );
 }
+// SOURCE: https://stackoverflow.com/questions/5731193/how-to-format-numbers
+
 
 function formatDate(coin) {
-
+  
 }
 
-function formatPercentage(coin) {
-
-}
 
 /*----------------------------- DROPDOWN API FUNCTIONALITY -------------------------*/
 
   
   // Update the coin container, displaying selected coin data
   //   function displayData(obj) {
-//     // COIN SYMBOL
-//     const symbol = document.createElement('span');
-//     symbol.id = 'symbol';
-//     symbol.innerText = obj.base;
+//     
 
-//     // PRICE
-//     let price = obj.current_price;
-//     const h2 = document.createElement('h2');
-//     h2.id = 'price';
-//     // Prices over a dollar are shown with 2 numbers after the decimal. 
-//     // Otherwise show all numbers after the decimal
-//     if (price > 1) {
-  //     price = obj.last.toFixed(2);
-  //   }
-//     h2.innerText = `$${price}`; 
-
-//   // NAME OF COIN
-//   const coinName = obj.coin_id;
-//   const h2 = document.createElement('h2');
-//   h3.id = 'coin-name';
-//   h3.innerText = coinName;
 //   // TIMESTAMP
 //   const time = getTimeFromDate(obj.timestamp);
 //   const timestamp = document.createElement('span');
