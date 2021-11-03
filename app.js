@@ -39,19 +39,21 @@ function loadStartImages() {
   const coinContainer = document.getElementById('coin-container');
   const coingeckoLink = document.getElementById('coingecko-link');
   // Loads a stock image inside the Coin Container until a coin is chosen from the dropdown.
-  loadImage(stockImageURL, 'placeholder-image', 'Green bottle on the edge of a sandy beach.', coinContainer);
+  const genieImg = loadImage(stockImageURL, 'placeholder-image', 'Green bottle on the edge of a sandy beach.');
+  coinContainer.append(genieImg);
   // Loads Coingecko logo at the footer inside a link element
-  loadImage(coingeckoImgURL, 'logo', 'Coingecko logo.', coingeckoLink);
+  const geckoImg = loadImage(coingeckoImgURL, 'logo', 'Coingecko logo.');
+  coingeckoLink.append(geckoImg);
 }
 
-function loadImage(url, assignID, alt, appendTarget) {
+function loadImage(url, assignID, alt) {
   const image = document.createElement('img');
   Object.assign(image, {
     id: assignID,
     src: url,
     alt: alt,
   });
-  appendTarget.append(image);
+  return image;
 }
 
 /*----------- DROPDOWN CREATION & FUNCTIONALITY -------------*/
@@ -97,8 +99,6 @@ function createTopOptions(dropdownEl, apiData) {
   });
 }
 
-
-
 /*-------------- DROPDOWN EVENT LISTENER ---------------*/
 function handleDropdownSelection(event, apiData) {
   // Prevent default & capture target value
@@ -106,46 +106,71 @@ function handleDropdownSelection(event, apiData) {
   const targetValue = event.target.value;
   // Display the selected cryptocurrency's data in the DOM
   displayData(apiData, targetValue);
-  // console.log(apiData);
 }
+
+// Creates elements and displays variable API data
+function displayData(apiData, selectedValue) {
+  const headerSection = document.createElement('header');
+  headerSection.id = 'coin-header-div';
+  const infoSection = document.createElement('div');
+  infoSection.id = 'info-section';
+  const infoLeft = document.createElement('div');
+  infoLeft.id = 'info-left';
+  const olLeft = document.createElement('ol');
+  infoLeft.append(olLeft);
+  const infoRight = document.createElement('div');
+  infoRight.id = 'info-right';
+  const olRight = document.createElement('ol');
+  infoRight.append(olRight);
+  infoSection.append(infoLeft, infoRight);
+  const footerSection = document.createElement('footer');
+  footerSection.id = 'coin-footer-div';
+  
+  // Clear the DOM for each selection
+  const coinContainer = document.getElementById('coin-container');
+  removeAllChildNodes(coinContainer);
+  // Find the selectedValue inside apiData
+  // loadCoinTemplate()
+  const chosenCoin = apiData.find(coin => coin.id === selectedValue);
+  // loadImage param format: (url, assignClass, alt, appendTarget) from line 49
+  const imageEl = loadImage( chosenCoin.image, 'coin-image', `${chosenCoin.name} logo`);
+  // createCoinEl param format: (coinObj, tagNameStr, idStr, apiValueStr, formatType(*OPTIONAL)) 
+  const nameEl    = createCoinEl(chosenCoin, 'h3', 'coin-name', 'name');
+  const priceEl   = createCoinEl(chosenCoin, 'h2', 'price', 'current_price', 'price');
+  const symbolEl  = createCoinEl(chosenCoin, 'span', 'symbol', 'symbol');
+  // Info section of CoinContainer
+  const high24El  = createCoinEl(chosenCoin, 'li', 'high-24', 'high_24h', 'price');
+  addLabel(high24El, '24 Hour High:');
+  const low24El   = createCoinEl(chosenCoin, 'li', 'low-24', 'low_24h', 'price');
+  addLabel(low24El, '24 Hour Low:');
+  const volumeEl  = createCoinEl(chosenCoin, 'li', 'volume', 'total_volume', 'bigNumber');
+  addLabel(volumeEl, '24 Hour Volume:');
+  const rankEl    = createCoinEl(chosenCoin, 'li', 'rank', 'market_cap_rank', 'rank');
+  addLabel(rankEl, 'Popularity:')
+  const mktCapEl  = createCoinEl(chosenCoin, 'li', 'market-cap', 'market_cap', 'price');
+  addLabel(mktCapEl, 'Market Cap:');
+  const supplyEl  = createCoinEl(chosenCoin, 'li', 'supply', 'circulating_supply', 'bigNumber');
+  addLabel(supplyEl, 'Circulating Supply:');
+  // Footer of CoinContainer
+  const timeEl    = createCoinEl(chosenCoin, 'span', 'time', 'last_updated', 'date')
+  // Append to the DOM
+  headerSection.append(imageEl, nameEl, symbolEl, priceEl);
+  olLeft.append(high24El, low24El, volumeEl);
+  olRight.append(rankEl, mktCapEl, supplyEl);
+  
+  // infoSection.append(high24El, low24El, volumeEl, rankEl, mktCapEl, supplyEl);
+  footerSection.append(timeEl);
+  coinContainer.append(headerSection, infoSection, footerSection);
+console.log(nameEl, symbolEl, priceEl, high24El, low24El, volumeEl, rankEl, mktCapEl, supplyEl, timeEl);
+  // coinContainer.append(nameEl, symbolEl, priceEl, high24El, low24El, volumeEl, rankEl, mktCapEl, supplyEl, timeEl)
+}
+
 
 // Function to clear the Coin Container in the DOM:
 function removeAllChildNodes(parent) {
   while (parent.firstChild) {
     parent.removeChild(parent.firstChild);
   }
-}
-
-function displayData(apiData, selectedValue) {
-  // const elementArray = [ nameEl, symbolEl, priceEl, high24El, low24El, rankEl, marketCapEl, supplyEl, volumeEl ];
-  const coinContainer = document.getElementById('coin-container');
-  // Clear the DOM for each selection
-  removeAllChildNodes(coinContainer);
-
-  // Find the selectedValue inside apiData
-  const chosenCoin = apiData.find(coin => coin.id === selectedValue);
-
-  // loadImage param format: (url, assignClass, alt, appendTarget) from line 49
-  const coinImage = loadImage( chosenCoin.image, 'coin-image', `${chosenCoin.name} logo`, coinContainer);
-  
-  // createCoinEl param format: (coinObj, tagNameStr, idStr, apiValueStr, formatType(*OPTIONAL)) 
-  const nameEl = createCoinEl(chosenCoin, 'h3', 'coin-name', 'name');
-  const symbolEl = createCoinEl(chosenCoin, 'span', 'symbol', 'symbol');
-  const priceEl = createCoinEl(chosenCoin, 'h2', 'price', 'current_price', 'price');
-  const high24El = createCoinEl(chosenCoin, 'span', 'high-24', 'high_24h', 'price');
-  const low24El = createCoinEl(chosenCoin, 'span', 'low-24', 'low_24h', 'price');
-  const rankEl = createCoinEl(chosenCoin, 'span', 'rank', 'market_cap_rank');
-
-  const marketCapEl = createCoinEl(chosenCoin, 'span', 'market-cap', 'market_cap', 'price');
-  const supplyEl = createCoinEl(chosenCoin, 'span', 'supply', 'circulating_supply', 'bigNumber');
-  const volumeEl = createCoinEl(chosenCoin, 'span', 'volume', 'total_volume', 'bigNumber');
-  
-  const timeEl = createCoinEl(chosenCoin, 'span', 'time', 'last_updated', 'date')
-  // Append
-
-
-
-  console.log(nameEl, symbolEl, priceEl, high24El, low24El, rankEl, marketCapEl, supplyEl, volumeEl, timeEl)
 }
 
 /*------------------------ COIN CONTAINER DOM ELEMENTS --------------------*/
@@ -161,6 +186,9 @@ function createCoinEl(coinObj, tagNameStr, idStr, apiValueStr, formatType) {
     case 'bigNumber':
       formatLargeNumber(coinObj, apiValueStr, element);
       break;
+    case 'rank':
+      element.textContent = `# ${coinObj[apiValueStr]}`
+      break;
     case 'date':
       formatDate(coinObj, apiValueStr, element);
       break;
@@ -169,27 +197,38 @@ function createCoinEl(coinObj, tagNameStr, idStr, apiValueStr, formatType) {
   }
   return element;
 }
-
-// Formats how prices are displayed in the DOM
-function formatPrice(coinObj, apiValueStr, elName) {
-  let price = coinObj[apiValueStr];
-  // Prices over a dollar are shown with 2 numbers after the decimal. 
-  if (price >= 1) {
-    price = price.toLocaleString(undefined, { style: 'currency', currency: 'USD' });
-  } else {
-    price = `$${price}`
-  }
-  elName.textContent = price; 
-}
-
-// Formats large numbers that aren't currency
-function formatLargeNumber(coinObj, apiValueStr, elName) {
-  let bigNum = coinObj[apiValueStr];
-  elName.textContent = bigNum.toLocaleString(undefined);
-}
-
-// Formats timestamp received from the API to a readable local date & time
-function formatDate(coinObj, apiValueStr, elName) {
-  const timestamp = new Date(coinObj[apiValueStr]);
-  elName.textContent = timestamp;
-}
+    
+    // Formats how prices are displayed in the DOM
+    function formatPrice(coinObj, apiValueStr, elName) {
+      let price = coinObj[apiValueStr];
+      // Prices over a dollar are shown with 2 numbers after the decimal. 
+      if (price >= 1) {
+        price = price.toLocaleString(undefined, { style: 'currency', currency: 'USD' });
+      } else {
+        price = `$${price}`
+      }
+      elName.textContent = price; 
+    }
+    
+    // Formats large numbers that aren't currency
+    function formatLargeNumber(coinObj, apiValueStr, elName) {
+      let bigNum = coinObj[apiValueStr];
+      elName.textContent = bigNum.toLocaleString();
+    }
+    
+    // Formats timestamp received from the API to a readable local date & time
+    function formatDate(coinObj, apiValueStr, elName) {
+      const timestamp = new Date(coinObj[apiValueStr]);
+      elName.textContent = timestamp;
+    }
+    
+    function addLabel(elNameToPrepend, labelName) {
+      const labelEl = document.createElement('label');
+      Object.assign(labelEl, {
+        className: 'label',
+        htmlFor: elNameToPrepend.id,
+        textContent: labelName,
+      })
+      // console.log(labelEl, elNameToPrepend)
+      elNameToPrepend.prepend(labelEl);
+    }
