@@ -57,7 +57,6 @@ function loadImage(url, assignID, alt) {
 }
 
 /*----------- DROPDOWN CREATION & FUNCTIONALITY -------------*/
-
 function createDropdown(data) {
   const dropdownTarget = document.getElementById('dropdown-target');
   const dropdown = document.createElement('select');
@@ -110,61 +109,48 @@ function handleDropdownSelection(event, apiData) {
 
 // Creates elements and displays variable API data
 function displayData(apiData, selectedValue) {
-  const headerSection = document.createElement('header');
-  headerSection.id = 'coin-header-div';
-  const infoSection = document.createElement('div');
-  infoSection.id = 'info-section';
-  const infoLeft = document.createElement('div');
-  infoLeft.id = 'info-left';
-  const olLeft = document.createElement('ol');
+  // Create the structure for the Coin Container (tagNameStr, id(//OPTIONAL))
+  const coinContainer = document.getElementById('coin-container');
+  const headerSection = createCoinStructure('header', 'coin-header-div');
+  const infoSection = createCoinStructure('div', 'info-section');
+  const footerSection = createCoinStructure('footer', 'coin-footer-div');
+  const infoLeft = createCoinStructure('div', 'info-left');
+  const infoRight = createCoinStructure('div', 'info-right');
+  const olLeft = createCoinStructure('ol');
+  const olRight = createCoinStructure('ol');
   infoLeft.append(olLeft);
-  const infoRight = document.createElement('div');
-  infoRight.id = 'info-right';
-  const olRight = document.createElement('ol');
   infoRight.append(olRight);
   infoSection.append(infoLeft, infoRight);
-  const footerSection = document.createElement('footer');
-  footerSection.id = 'coin-footer-div';
   
   // Clear the DOM for each selection
-  const coinContainer = document.getElementById('coin-container');
   removeAllChildNodes(coinContainer);
   // Find the selectedValue inside apiData
   // loadCoinTemplate()
   const chosenCoin = apiData.find(coin => coin.id === selectedValue);
   // loadImage param format: (url, assignClass, alt, appendTarget) from line 49
   const imageEl = loadImage( chosenCoin.image, 'coin-image', `${chosenCoin.name} logo`);
-  // createCoinEl param format: (coinObj, tagNameStr, idStr, apiValueStr, formatType(*OPTIONAL)) 
+  // createCoinEl param format: (coinObj, tagNameStr, idStr, apiValueStr, formatType(//OPTIONAL), labelName(//OPTIONAL)) 
   const nameEl    = createCoinEl(chosenCoin, 'h3', 'coin-name', 'name');
   const priceEl   = createCoinEl(chosenCoin, 'h2', 'price', 'current_price', 'price');
   const symbolEl  = createCoinEl(chosenCoin, 'span', 'symbol', 'symbol');
   // Info section of CoinContainer
-  const high24El  = createCoinEl(chosenCoin, 'li', 'high-24', 'high_24h', 'price');
-  addLabel(high24El, '24 Hour High:');
-  const low24El   = createCoinEl(chosenCoin, 'li', 'low-24', 'low_24h', 'price');
-  addLabel(low24El, '24 Hour Low:');
-  const volumeEl  = createCoinEl(chosenCoin, 'li', 'volume', 'total_volume', 'bigNumber');
-  addLabel(volumeEl, '24 Hour Volume:');
-  const rankEl    = createCoinEl(chosenCoin, 'li', 'rank', 'market_cap_rank', 'rank');
-  addLabel(rankEl, 'Popularity:')
-  const mktCapEl  = createCoinEl(chosenCoin, 'li', 'market-cap', 'market_cap', 'price');
-  addLabel(mktCapEl, 'Market Cap:');
-  const supplyEl  = createCoinEl(chosenCoin, 'li', 'supply', 'circulating_supply', 'bigNumber');
-  addLabel(supplyEl, 'Circulating Supply:');
+  const high24El  = createCoinEl(chosenCoin, 'li', 'high-24', 'high_24h', 'price', '24 Hour High:');
+  const low24El   = createCoinEl(chosenCoin, 'li', 'low-24', 'low_24h', 'price', '24 Hour Low:');
+  const volumeEl  = createCoinEl(chosenCoin, 'li', 'volume', 'total_volume', 'bigNumber', '24 Hour Volume:');
+  const rankEl    = createCoinEl(chosenCoin, 'li', 'rank', 'market_cap_rank', 'rank', 'Popularity:');
+  const mktCapEl  = createCoinEl(chosenCoin, 'li', 'market-cap', 'market_cap', 'price', 'Market Cap:');
+  const supplyEl  = createCoinEl(chosenCoin, 'li', 'supply', 'circulating_supply', 'bigNumber', 'Circulating Supply:');
   // Footer of CoinContainer
-  const timeEl    = createCoinEl(chosenCoin, 'span', 'time', 'last_updated', 'date')
-  // Append to the DOM
+  const timeEl    = createCoinEl(chosenCoin, 'span', 'time', 'last_updated', 'date', 'Last Updated:')
+  // Bring it all together, appending all elements to the DOM
   headerSection.append(imageEl, nameEl, symbolEl, priceEl);
   olLeft.append(high24El, low24El, volumeEl);
   olRight.append(rankEl, mktCapEl, supplyEl);
-  
-  // infoSection.append(high24El, low24El, volumeEl, rankEl, mktCapEl, supplyEl);
   footerSection.append(timeEl);
   coinContainer.append(headerSection, infoSection, footerSection);
-console.log(nameEl, symbolEl, priceEl, high24El, low24El, volumeEl, rankEl, mktCapEl, supplyEl, timeEl);
-  // coinContainer.append(nameEl, symbolEl, priceEl, high24El, low24El, volumeEl, rankEl, mktCapEl, supplyEl, timeEl)
+  
+  console.log(nameEl, symbolEl, priceEl, high24El, low24El, volumeEl, rankEl, mktCapEl, supplyEl, timeEl);
 }
-
 
 // Function to clear the Coin Container in the DOM:
 function removeAllChildNodes(parent) {
@@ -173,9 +159,20 @@ function removeAllChildNodes(parent) {
   }
 }
 
+// coinContainer.addEventListener('click', linkToSite);
+// function linkToSite() {
+  
+  // }
+  
 /*------------------------ COIN CONTAINER DOM ELEMENTS --------------------*/
-// ELEMENT CREATOR FUNCTION
-function createCoinEl(coinObj, tagNameStr, idStr, apiValueStr, formatType) {
+// ELEMENT CREATOR FUNCTIONS
+function createCoinStructure(tagNameStr, id) {
+  const element = document.createElement(tagNameStr);
+  element.id = id;
+  return element;
+}
+
+function createCoinEl(coinObj, tagNameStr, idStr, apiValueStr, formatType, labelName) {
   const element = document.createElement(tagNameStr);
   element.id = idStr;
   // Switch handles the optional "formatType" parameter
@@ -195,40 +192,43 @@ function createCoinEl(coinObj, tagNameStr, idStr, apiValueStr, formatType) {
     default:
       element.textContent = coinObj[apiValueStr];
   }
+  if (labelName) {
+    addLabel(element, labelName)
+  }
   return element;
 }
-    
-    // Formats how prices are displayed in the DOM
-    function formatPrice(coinObj, apiValueStr, elName) {
-      let price = coinObj[apiValueStr];
-      // Prices over a dollar are shown with 2 numbers after the decimal. 
-      if (price >= 1) {
-        price = price.toLocaleString(undefined, { style: 'currency', currency: 'USD' });
-      } else {
-        price = `$${price}`
-      }
-      elName.textContent = price; 
-    }
-    
-    // Formats large numbers that aren't currency
-    function formatLargeNumber(coinObj, apiValueStr, elName) {
-      let bigNum = coinObj[apiValueStr];
-      elName.textContent = bigNum.toLocaleString();
-    }
-    
-    // Formats timestamp received from the API to a readable local date & time
-    function formatDate(coinObj, apiValueStr, elName) {
-      const timestamp = new Date(coinObj[apiValueStr]);
-      elName.textContent = timestamp;
-    }
-    
-    function addLabel(elNameToPrepend, labelName) {
-      const labelEl = document.createElement('label');
-      Object.assign(labelEl, {
-        className: 'label',
-        htmlFor: elNameToPrepend.id,
-        textContent: labelName,
-      })
-      // console.log(labelEl, elNameToPrepend)
-      elNameToPrepend.prepend(labelEl);
-    }
+
+// Formats how prices are displayed in the DOM
+function formatPrice(coinObj, apiValueStr, elName) {
+  let price = coinObj[apiValueStr];
+  // Prices over a dollar are shown with 2 numbers after the decimal. 
+  if (price >= 1) {
+    price = price.toLocaleString(undefined, { style: 'currency', currency: 'USD' });
+  } else {
+    price = `$${price}`
+  }
+  elName.textContent = price; 
+}
+
+// Formats large numbers that aren't currency
+function formatLargeNumber(coinObj, apiValueStr, elName) {
+  let bigNum = coinObj[apiValueStr];
+  elName.textContent = bigNum.toLocaleString();
+}
+
+// Formats timestamp received from the API to a readable local date & time
+function formatDate(coinObj, apiValueStr, elName) {
+  const timestamp = new Date(coinObj[apiValueStr]);
+  elName.textContent = timestamp;
+}
+
+// Add a label to information in the Coin Container
+function addLabel(elNameToPrepend, labelName) {
+  const labelEl = document.createElement('label');
+  Object.assign(labelEl, {
+    className: 'label',
+    htmlFor: elNameToPrepend.id,
+    textContent: labelName,
+  })
+  elNameToPrepend.prepend(labelEl);
+}
