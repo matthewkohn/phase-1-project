@@ -99,6 +99,10 @@ img#placeholder-image {
 }
 
 /*-------------------- Info Section Header ----------------*/
+div#coin-structure {
+  width: 100%;
+}
+
 header#coin-header-div {
   flex: 1;
   padding-top: 30px;
@@ -148,19 +152,12 @@ div#info-section {
   width: 100%;
 }
 
-div#info-left,
-div#info-right {
-  display: inherit;
-
-  justify-content: center;
-  width: 50%;
-}
-
-ol {
-  width: 65%;
+ol#info-left,
+ol#info-right {
+  width: 40%;
+  max-width: 350px;
   padding-inline-start: 0;
-  margin: 20px 0;
-  align-content:center;
+  margin: 20px 40px;
 }
 
 li {
@@ -173,7 +170,6 @@ label.label {
   font-weight: 900;
   font-style: italic;
   float: left;
-  flex-direction: column;
 }
 
 /*----------------- Info Section Footer ------------------*/
@@ -182,25 +178,13 @@ footer#coin-footer-div {
 }
 
 footer#coin-footer-div span#time {
-  /* color: black; */
-  /* padding-top: 50px; */
   font-size: 0.8rem;
 }
 
 span#time label.label {
   float:none;
-  padding-right: 10px;
+  padding-right: 15px;
 }
-/* a#trade-link {
-  background-color: rgb(89, 179, 0);
-  border: none;
-  border-radius: 30px;
-  color: white;
-  padding: 20px 34px;
-  text-decoration: none;
-  font-size: 20px;
-  cursor: pointer;
-} */
 
 /* ------------------Footer styling------------------ */
 footer#page-footer {
@@ -229,7 +213,12 @@ img#logo:hover {
 }
 
 /*---------------- Media Queries ----------------*/
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
+  h2#price {
+    font-size: 2.4rem;
+    padding-bottom: 45px;
+  }
+  
   div#info-section {
     flex-direction: column;
     align-items: center;
@@ -239,11 +228,28 @@ img#logo:hover {
   div#info-right {
     width: 90%;
   }
+
+  ol {
+    margin: 0;
+  }
+
+  li#volume {
+    margin: 0;
+  }
+
+  li#supply {
+    margin-bottom: 40px;
+  }
 }
 
 @media (max-width: 760px) {
   ol li {
-    text-align:center;
+    /* text-align:center; */
     line-height: 1.4rem;
+    font-size: 0.7rem;
+  }
+
+  footer#coin-footer-div span#time {
+    font-size: 0.5rem;
   }
 }
