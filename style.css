@@ -85,6 +85,11 @@ section#coin-container {
   flex-direction: column;
 }
 
+div#coin-structure.hidden,
+#placeholder-image.hidden {
+  display: none;
+}
+
 img#placeholder-image {
   width: 200px;
   max-height: 400px;
