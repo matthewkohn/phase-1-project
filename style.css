@@ -71,7 +71,7 @@ option#default-label {
   font-style: italic;
 }
 
-/* -----------------Coin Container content styling-------------- */
+/* -----------------Coin Container/Data content styling-------------- */
 section#coin-container {
   min-height: 50vh;
   width: 70vw;
@@ -98,7 +98,7 @@ img#placeholder-image {
   opacity: 0.7;
 }
 
-/*-------------------- Info Section Header ----------------*/
+/*-------------------- Data Section Header ----------------*/
 div#coin-structure {
   width: 100%;
 }
@@ -144,16 +144,16 @@ h2#price:hover {
   transition: color 0.5s ease-in;
 }
 
-/*------------------------ Info Section --------------------*/
-div#info-section {
+/*------------------------ Data Section --------------------*/
+div#data-section {
   display: inline-flex;
   flex-wrap: wrap;
   justify-content: center;
   width: 100%;
 }
 
-ol#info-left,
-ol#info-right {
+ol#data-left,
+ol#data-right {
   width: 40%;
   max-width: 350px;
   padding-inline-start: 0;
@@ -172,9 +172,12 @@ label.label {
   float: left;
 }
 
-/*----------------- Info Section Footer ------------------*/
+/*----------------- Data Section Footer ------------------*/
 footer#coin-footer-div {
   padding-bottom: 15px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 footer#coin-footer-div span#time {
@@ -184,6 +187,26 @@ footer#coin-footer-div span#time {
 span#time label.label {
   float:none;
   padding-right: 15px;
+}
+
+button#info-button {
+  padding: 15px;
+  margin: 20px 0;
+  border-radius: 15px;
+  border: none;
+  background-color: rgb(89, 179, 0);
+  color: cyan;
+  font-size: 1rem;
+  transition: all 0.4s ease-out;
+}
+
+button#info-button:hover {
+  padding: 15px 50px;
+  background-color: rgba(89, 179, 0, 0.5);
+  /* border: 3px solid rgb(89, 179, 0); */
+  color: #000;
+  cursor: pointer;
+  transition: all 0.4s ease-out;
 }
 
 /* ------------------Footer styling------------------ */
@@ -219,13 +242,13 @@ img#logo:hover {
     padding-bottom: 45px;
   }
   
-  div#info-section {
+  div#data-section {
     flex-direction: column;
     align-items: center;
   }
 
-  div#info-left,
-  div#info-right {
+  div#data-left,
+  div#data-right {
     width: 90%;
   }
 
