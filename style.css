@@ -139,6 +139,7 @@ h2#price {
   letter-spacing: 1.5px;
   margin: 0;
   padding-top: 20px;
+  transition: color 1s ease-in;
 }
 
 h2#price:hover {

@@ -2,8 +2,8 @@
 // Display the dropdown and default images when DOM Content Loads
 document.addEventListener('DOMContentLoaded', init);
 
+// Fetch data from CoinGecko API, passing data to load Dropdown and create the DOM structure of the page
 function init() {
-  // Fetch data from CoinGecko API, passing data to load Dropdown & populate DOM with selected option data
   fetchCoinList();
   loadPage();
 }
@@ -79,7 +79,7 @@ function loadStartImages(container) {
 }
 // Creates the structure of the Coin Container
 function buildCoinContainer(container) {
-  // // // createElement(tagNameStr, idStr) 
+  // createElement(tagNameStr, idStr) 
   const coinStructure = createElement('div', 'coin-structure');
   coinStructure.className = 'hidden';
   const headerSection = createElement('header', 'coin-header-div');
@@ -88,8 +88,7 @@ function buildCoinContainer(container) {
   const dataLeft = createElement('ol', 'data-left');
   const dataRight = createElement('ol', 'data-right');
   const articleEl = createElement('article', 'info-section');
-  articleEl.className = 'hidden';
-  
+  articleEl.className = 'hidden';  
   // createImage(url, assignClass, alt)
   const imageEl   = createImage( '#', 'coin-image', `Oops! Please try again.`);
   const nameEl    = createElement('h3', 'coin-name');
@@ -107,6 +106,7 @@ function buildCoinContainer(container) {
   // Footer of CoinContainer
   const timeEl    = createElement('span', 'time');
   const buttonEl  = createElement('button', 'info-button');
+  buttonEl.addEventListener('click', toggleInfoButton);
   // Bring it all together, appending all elements to the DOM
   headerSection.append(imageEl, nameEl, symbolEl, priceEl);
   dataLeft.append(changeEl, high24El, low24El, volumeEl);
@@ -115,11 +115,7 @@ function buildCoinContainer(container) {
   footerSection.append(timeEl, buttonEl);
   coinStructure.append(headerSection, dataSection, articleEl, footerSection);
   container.append(coinStructure);
-  return container;
 };
-
-
-
 
 /*-------------------------------- DROPDOWN EVENT LISTENER -------------------------------*/
 // When a dropdown option is selected, fetch the current data to display & the info to be loaded/hidden
@@ -128,24 +124,12 @@ function handleDropdownSelection(event) {
   event.preventDefault();  
   const targetValue = event.target.value;
   const dataURL = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${targetValue}&sparkline=false`;
-  fetchFunction(formatDataContent, dataURL);
   const infoURL = `https://api.coingecko.com/api/v3/coins/${targetValue}?localization=false&tickers=false&market_data=false&community_data=false&developer_data=false&sparkline=false`;
+  fetchFunction(formatDataContent, dataURL);
   fetchFunction(handleInfoContent, infoURL);
-  const dataSection = document.getElementById('data-section');
-  // const infoSection = document.getElementById('info-section');
-  
-  if (isHidden(dataSection)) {
-    toggleButton();
-  }
 }
 
-
-
-
-
-
-
-/*---------------------------- HANDLE DATA ------------------*/
+/*---------------------------- HANDLE DATA SECTION ------------------*/
 // Formats the API data and returns a unique object where the key='id', 
 // and the value= an array with the domContent to be used and (optional) labelContent
 // {id: [ domContent, labelContent ] }
@@ -186,25 +170,15 @@ function updateDataContent(contentObj) {
       addLabel(element, label);
     }
   }
-  // Display data
   displayData();
 }
+// Display data using toggleDisplay(idToHide, idToShow)
 function displayData() {
-  const coinStructure = document.getElementById('coin-structure');
-  const placeholder = document.getElementById('placeholder-image');
-  placeholder.classList.add('hidden');
-  coinStructure.classList.remove('hidden');
-
-  // Using Event Delegation to attach an event handler to the 'info-button' that fetches data to load on click
-  // Source: Stack Overflow https://stackoverflow.com/questions/34896106/attach-event-to-dynamic-elements-in-javascript
-  coinStructure.addEventListener('click', function(event) {
-    if (event.target && event.target.id == 'info-button') {
-      toggleButton();
-    }
-  });
+  toggleDisplay('placeholder-image', 'coin-structure');
+  toggleDisplay('info-section', 'data-section');
 }
 
-/*-------------------------- HANDLE INFO ----------------------*/
+/*-------------------------- HANDLE INFO SECTION ----------------------*/
 function handleInfoContent(targetData) {
   // Clear the article container of any children there previously
   const articleContainer = document.getElementById('info-section');
@@ -219,50 +193,6 @@ function handleInfoContent(targetData) {
     articleContainer.append(paragraphEl);
   })
 }
-
-/*------------------------- TOGGLE BETWEEN DATA & INFO -----------------*/
-
-function toggleButton() {
-  const dataDisplay = document.getElementById('data-section');
-  const infoDisplay = document.getElementById('info-section');
-  if (isHidden(infoDisplay)) {
-    infoDisplay.classList.remove('hidden');
-    dataDisplay.classList.add('hidden');
-  } else if (isHidden(dataDisplay)) {
-    dataDisplay.classList.remove('hidden');
-    infoDisplay.classList.add('hidden');
-  }
-}
-
-// toggleButton('data-section', 'info-section');
-
-
-
-
-
-// function toggleButton(hideId, showId) {
-//   const showEl = document.getElementById(showId);
-//   const hideEl = document.getElementById(hideId);
-//   showEl.classList.remove('hidden');
-//   hideEl.classList.add('hidden');
-// }
-
-// const hiddenAttr = 'hidden';
-  // if (dataDisplay.style.display === 'none') {
-  //   console.log("Data class detected");
-  // } else {
-  //   dataDisplay.classList.add('hidden');
-  // }
-  // if (articleContainer.style.display === 'none') {
-  //   console.log("Info class detected");
-  // } else {
-  //   articleContainer.classList.add('hidden');
-  // }
-
-
-
-
-
 
 /*------------------------------ FORMATTERS --------------------------------*/
 function formatPrice(number) {
@@ -317,18 +247,38 @@ function removeAllChildNodes(parent) {
     parent.removeChild(parent.firstChild);
   }
 }
-// Where el is the DOM element you'd like to test for visibility
-function isHidden(el) {
-  return (el.offsetParent === null)
+
+/*------------------------- TOGGLE BETWEEN DATA & INFO -----------------*/
+// Info-button triggers on-click event listener
+function toggleInfoButton() {
+  if (isHidden('info-section')) {
+    toggleDisplay('data-section', 'info-section')
+  } else {
+    toggleDisplay('info-section', 'data-section');
+  }
 }
-// ELEMENT CREATION
-function createElement(tagNameStr, id, labelContent) {
+// Generic 'hidden' toggle function
+function toggleDisplay(hideId, showId) {
+  const hideEl = document.getElementById(hideId);
+  const showEl = document.getElementById(showId);
+  hideEl.classList.add('hidden');
+  showEl.classList.remove('hidden');
+}
+// Where id is a string and el is the DOM element you'd like to test for visibility
+function isHidden(id) {
+  const el = document.getElementById(id)
+  if (el.childElementCount === null) {
+    return;
+  }
+  // return (el.offsetParent === null)
+  return (el.classList.value === 'hidden');
+}
+
+/*-------------------- ELEMENT CREATION ----------------*/
+function createElement(tagNameStr, id) {
   const element = document.createElement(tagNameStr);
   if (id) {
     element.id = id;
-  }
-  if (labelContent) {
-    addLabel(element, labelContent)
   }
   return element;
 }
