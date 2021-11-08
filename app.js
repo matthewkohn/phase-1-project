@@ -26,8 +26,6 @@ function createDropdown(data) {
   const dropdownTarget = document.getElementById('dropdown-target');
   const dropdown = document.createElement('select');
   dropdown.id = 'coins-dropdown';
-  // Function that appends a disabled default option to the top of the dropdown that's being created
-  // createDefaultOptionEl(dropdown);
   // Creates the dropdown options and appends to the dropdown that's being created
   createOptions(dropdown, data);
   dropdownTarget.append(dropdown);
@@ -36,8 +34,9 @@ function createDropdown(data) {
 }
 // Creates Ranked crypto coin options and attaches to the dropdown element
 function createOptions(dropdownEl, apiData) {
-  // Iterate through fetchData, creating an option element out of each object
+  // Create the default disabled option
   createDefaultOptionEl(dropdownEl);
+  // Iterate through fetchData, creating an option element out of each object
   apiData.map(data => {
     // console.log(data);
     const marketRank = data.market_cap_rank;
@@ -88,7 +87,7 @@ function buildCoinContainer(container) {
   const footerSection = createElement('footer', 'coin-footer-div');
   const dataLeft = createElement('ol', 'data-left');
   const dataRight = createElement('ol', 'data-right');
-  const articleEl = createElement('article', 'info-structure');
+  const articleEl = createElement('article', 'info-section');
   articleEl.className = 'hidden';
   
   // createImage(url, assignClass, alt)
@@ -120,29 +119,37 @@ function buildCoinContainer(container) {
 };
 
 
-// function addLink(element) {
-//   const link = createElement('a');
-//   link.src = 
-//   element.append(link);
 
-//   element.addEventListener('click', createLinkTag);
-// }
-
-// function createLinkTag(event) {
-//   console.log(event.target);
-// }
 
 /*-------------------------------- DROPDOWN EVENT LISTENER -------------------------------*/
+// When a dropdown option is selected, fetch the current data to display & the info to be loaded/hidden
 function handleDropdownSelection(event) {
   // Prevent default & capture target value
   event.preventDefault();  
   const targetValue = event.target.value;
-  const apiURL = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${targetValue}&sparkline=false`;
-  fetchFunction(formatContent, apiURL);
+  const dataURL = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${targetValue}&sparkline=false`;
+  fetchFunction(formatDataContent, dataURL);
+  const infoURL = `https://api.coingecko.com/api/v3/coins/${targetValue}?localization=false&tickers=false&market_data=false&community_data=false&developer_data=false&sparkline=false`;
+  fetchFunction(handleInfoContent, infoURL);
+  const dataSection = document.getElementById('data-section');
+  // const infoSection = document.getElementById('info-section');
+  
+  if (isHidden(dataSection)) {
+    toggleButton();
+  }
 }
-// Formats the API data and returns a usable object where the key='id' & the value= both the domContent to be used and an optional labelContent
+
+
+
+
+
+
+
+/*---------------------------- HANDLE DATA ------------------*/
+// Formats the API data and returns a unique object where the key='id', 
+// and the value= an array with the domContent to be used and (optional) labelContent
 // {id: [ domContent, labelContent ] }
-function formatContent(targetData) {
+function formatDataContent(targetData) {
   const apiData = targetData[0];
   const formattedContentObj = {
     'info-button':    [`Learn More About ${apiData.name}`],
@@ -160,10 +167,10 @@ function formatContent(targetData) {
     'supply':         [formatLargeNumber(apiData.circulating_supply), 'Circulating Supply:'],
     'time':           [formatDate(apiData.last_updated), 'Last Updated:'],
   }
-  updateDOMContent(formattedContentObj, apiData);
+  updateDataContent(formattedContentObj);
 }
 // Takes the formatted API data {id: domContent} and updates the DOM
-function updateDOMContent(contentObj, apiData) {
+function updateDataContent(contentObj) {
   // Interpret data
   const coinObject = contentObj;
   for (const [elementID, [text, label]] of Object.entries(coinObject)) {
@@ -180,56 +187,77 @@ function updateDOMContent(contentObj, apiData) {
     }
   }
   // Display data
-  displayDom(apiData);
+  displayData();
 }
-
-function displayDom(apiData) {
+function displayData() {
   const coinStructure = document.getElementById('coin-structure');
   const placeholder = document.getElementById('placeholder-image');
   placeholder.classList.add('hidden');
   coinStructure.classList.remove('hidden');
+
   // Using Event Delegation to attach an event handler to the 'info-button' that fetches data to load on click
   // Source: Stack Overflow https://stackoverflow.com/questions/34896106/attach-event-to-dynamic-elements-in-javascript
-  coinStructure.addEventListener('click', function(e) {
-    if (e.target && e.target.id == 'info-button') {
-      fetchMoreInfo(apiData);
+  coinStructure.addEventListener('click', function(event) {
+    if (event.target && event.target.id == 'info-button') {
+      toggleButton();
     }
   });
 }
-// Once the info-button is clicked, the info for that coin is fetched, formatted, and displayed in the DOM
-function fetchMoreInfo(apiData) {
-  const apiID = apiData.id;
-  const apiURL = `https://api.coingecko.com/api/v3/coins/${apiID}?localization=false&tickers=false&market_data=false&community_data=false&developer_data=false&sparkline=false`;
-  fetchFunction(handleInfo, apiURL);
-}
-// 
-function handleInfo(data) {
-  const coinHeader = document.getElementById('coin-header-div');
-  const dataSection = document.getElementById('data-section');
-  const coinFooter = document.getElementById('coin-footer-div');
-  const articleSection = document.getElementById('info-structure');
-  
-  dataSection.className = 'hidden';
-  articleSection.classList.remove('hidden');
 
-
-  console.log(data.description.en);
+/*-------------------------- HANDLE INFO ----------------------*/
+function handleInfoContent(targetData) {
+  // Clear the article container of any children there previously
+  const articleContainer = document.getElementById('info-section');
+  removeAllChildNodes(articleContainer);
+  // Format the info
+  const coinInfo = targetData.description.en;
+  const paragraphArray = coinInfo.split(/\n\r\n/);
+  // The number of paragraph varies, so assign a <p> tag to each regardless of how many
+  paragraphArray.map(paragraph => {
+    const paragraphEl = createElement('p', 'paragraph');
+    paragraphEl.innerHTML = paragraph;
+    articleContainer.append(paragraphEl);
+  })
 }
 
-/*
-const coinStructure = createElement('div', 'coin-structure');
-  coinStructure.className = 'hidden';
-  const headerSection = createElement('header', 'coin-header-div');
-  const dataSection = createElement('div', 'data-section');
-  const footerSection = createElement('footer', 'coin-footer-div');
-  const dataLeft = createElement('ol', 'data-left');
-  const dataRight = createElement('ol', 'data-right');
-  const articleEl = createElement('article', 'info-structure');
-*/
+/*------------------------- TOGGLE BETWEEN DATA & INFO -----------------*/
+
+function toggleButton() {
+  const dataDisplay = document.getElementById('data-section');
+  const infoDisplay = document.getElementById('info-section');
+  if (isHidden(infoDisplay)) {
+    infoDisplay.classList.remove('hidden');
+    dataDisplay.classList.add('hidden');
+  } else if (isHidden(dataDisplay)) {
+    dataDisplay.classList.remove('hidden');
+    infoDisplay.classList.add('hidden');
+  }
+}
+
+// toggleButton('data-section', 'info-section');
 
 
 
 
+
+// function toggleButton(hideId, showId) {
+//   const showEl = document.getElementById(showId);
+//   const hideEl = document.getElementById(hideId);
+//   showEl.classList.remove('hidden');
+//   hideEl.classList.add('hidden');
+// }
+
+// const hiddenAttr = 'hidden';
+  // if (dataDisplay.style.display === 'none') {
+  //   console.log("Data class detected");
+  // } else {
+  //   dataDisplay.classList.add('hidden');
+  // }
+  // if (articleContainer.style.display === 'none') {
+  //   console.log("Info class detected");
+  // } else {
+  //   articleContainer.classList.add('hidden');
+  // }
 
 
 
@@ -247,29 +275,24 @@ function formatPrice(number) {
   }
   return number; 
 }
-
 // Formats large numbers over a million
 function formatLargeNumber(number) {
   const bigNum = Math.floor(number / 1000000);
   return `${bigNum.toLocaleString()} Million`;
 }
-
 // Formats timestamp received from the API to a readable local date & time
 function formatDate(timestamp) {
   return new Date(timestamp);
 }
-
 function formatPercentage(float) {
   return `${float.toFixed(2)} %`
 }
-
 function formatRank(rankNumber) {
   return `# ${rankNumber}`;
 }
 
 /*------------------------ HELPER FUNCTIONS --------------------*/
-// FETCH
-// API docs: https://www.coingecko.com/en/api/documentation
+// Fetch API docs: https://www.coingecko.com/en/api/documentation
 function fetchFunction(dataHandler, apiURL) {
   const URL = apiURL;
   fetch(URL)
@@ -288,12 +311,16 @@ function displayErrorMessage() {
   h2.textContent = "Sorry, the system isn't working right now. Please try again later.";
   section.append(h2);
 }
+// Clears children from its container
 function removeAllChildNodes(parent) {
   while (parent.firstChild) {
     parent.removeChild(parent.firstChild);
   }
 }
-
+// Where el is the DOM element you'd like to test for visibility
+function isHidden(el) {
+  return (el.offsetParent === null)
+}
 // ELEMENT CREATION
 function createElement(tagNameStr, id, labelContent) {
   const element = document.createElement(tagNameStr);

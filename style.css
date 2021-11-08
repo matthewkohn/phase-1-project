@@ -86,7 +86,9 @@ section#coin-container {
 }
 
 div#coin-structure.hidden,
-#placeholder-image.hidden {
+#placeholder-image.hidden,
+div#data-section.hidden,
+article#info-section.hidden {
   display: none;
 }
 
@@ -101,6 +103,7 @@ img#placeholder-image {
 /*-------------------- Data Section Header ----------------*/
 div#coin-structure {
   width: 100%;
+  display: contents;
 }
 
 header#coin-header-div {
@@ -170,6 +173,41 @@ label.label {
   font-weight: 900;
   font-style: italic;
   float: left;
+}
+
+/*----------------- Info Article --------------------------*/
+article#info-section {
+  padding: 0 60px;
+  margin-bottom: 20px;
+  width: 50vw;
+  height: 400px;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  
+  border: 1px solid rgb(89, 179, 0);
+  border-radius: 5px;
+  display: flex;
+  /* justify-content: center; */
+  flex-direction: column;
+}
+
+article#info-section p {
+  line-height: 2.4rem;
+  font-size: 1.2rem;
+  text-align: left;
+  text-indent: 50px;
+}
+
+article#info-section::-webkit-scrollbar {
+  width: 15px;
+}
+
+article#info-section::-webkit-scrollbar-track {
+  background:rgba(89, 179, 0, 0.2);
+}
+
+article#info-section::-webkit-scrollbar-thumb {
+  background: rgb(89, 179, 0);
 }
 
 /*----------------- Data Section Footer ------------------*/
