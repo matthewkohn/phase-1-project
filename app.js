@@ -36,16 +36,17 @@ function createDropdown(data) {
 function createOptions(dropdownEl, apiData) {
   // Create the default disabled option
   createDefaultOptionEl(dropdownEl);
-  // Iterate through fetchData, creating an option element out of each object
-  apiData.map(data => {
-    // console.log(data);
+  // Iterate through fetchData, creating an option element out of each object sorted by market rank
+  const sortedData = apiData.sort(data => data.market_cap_rank);
+  sortedData.map(data => {
     const marketRank = data.market_cap_rank;
     const name = data.name;
-    // REMINDER: Using Object.assign() here took elements out of order
     const option = document.createElement('option');
-    option.value = data.id;
-    option.className = 'option-item';
-    option.textContent = `${marketRank}) ${name}`;
+    Object.assign(option, {
+      value: data.id,
+      className: 'option-item',
+      textContent: `${marketRank}) ${name}`,
+    })
     dropdownEl.appendChild(option);
   });
 }
@@ -89,7 +90,7 @@ function buildCoinContainer(container) {
   const dataRight = createElement('ol', 'data-right');
   const articleEl = createElement('article', 'info-section');
   articleEl.className = 'hidden';  
-  // createImage(url, assignClass, alt)
+  // Header of CoinContainer using createImage(url, assignClass, alt)
   const imageEl   = createImage( '#', 'coin-image', `Oops! Please try again.`);
   const nameEl    = createElement('h3', 'coin-name');
   const priceEl   = createElement('h2', 'price');
@@ -185,6 +186,13 @@ function handleInfoContent(targetData) {
   removeAllChildNodes(articleContainer);
   // Format the info
   const coinInfo = targetData.description.en;
+  if (coinInfo === "") {
+    const link = createElement('a', 'blank-info-link');
+    link.href = `https://www.coingecko.com/en/coins/${targetData.id}`;
+    link.target = '_blank';
+    link.textContent = 'Check out CoinGecko to learn more!';
+    articleContainer.append(link);
+  }
   const paragraphArray = coinInfo.split(/\n\r\n/);
   // The number of paragraph varies, so assign a <p> tag to each regardless of how many
   paragraphArray.map(paragraph => {
@@ -251,10 +259,15 @@ function removeAllChildNodes(parent) {
 /*------------------------- TOGGLE BETWEEN DATA & INFO -----------------*/
 // Info-button triggers on-click event listener
 function toggleInfoButton() {
+  const button = document.getElementById('info-button');
+  const name = document.getElementById('coin-name');
+  // const 
   if (isHidden('info-section')) {
-    toggleDisplay('data-section', 'info-section')
+    toggleDisplay('data-section', 'info-section');
+    button.textContent = 'Go back';
   } else {
     toggleDisplay('info-section', 'data-section');
+    button.textContent = `Learn more about ${name.textContent}`;
   }
 }
 // Generic 'hidden' toggle function
