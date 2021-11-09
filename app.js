@@ -150,7 +150,7 @@ function formatDataContent(targetData) {
     'market-cap':     [formatPrice(apiData.market_cap), 'Market Cap:'],
     'volume':         [formatLargeNumber(apiData.total_volume), '24-Hour Volume:'],
     'supply':         [formatLargeNumber(apiData.circulating_supply), 'Circulating Supply:'],
-    'time':           [formatDate(apiData.last_updated), 'Last Updated:'],
+    'time':           [formatDate(apiData.last_updated), 'Last Updated At:'],
   }
   updateDataContent(formattedContentObj);
 }
@@ -190,7 +190,7 @@ function handleInfoContent(targetData) {
     const link = createElement('a', 'blank-info-link');
     link.href = `https://www.coingecko.com/en/coins/${targetData.id}`;
     link.target = '_blank';
-    link.textContent = 'Check out CoinGecko to learn more!';
+    link.textContent = 'Visit CoinGecko.com to learn more!';
     articleContainer.append(link);
   }
   const paragraphArray = coinInfo.split(/\n\r\n/);
@@ -200,33 +200,6 @@ function handleInfoContent(targetData) {
     paragraphEl.innerHTML = paragraph;
     articleContainer.append(paragraphEl);
   })
-}
-
-/*------------------------------ FORMATTERS --------------------------------*/
-function formatPrice(number) {
-  if (number > 1000000) {
-    number = `$${formatLargeNumber(number)}`;
-  } else if (number >= 1) {
-    number = number.toLocaleString(undefined, { style: 'currency', currency: 'USD' });
-  } else {
-    number = `$${number}`;
-  }
-  return number; 
-}
-// Formats large numbers over a million
-function formatLargeNumber(number) {
-  const bigNum = Math.floor(number / 1000000);
-  return `${bigNum.toLocaleString()} Million`;
-}
-// Formats timestamp received from the API to a readable local date & time
-function formatDate(timestamp) {
-  return new Date(timestamp);
-}
-function formatPercentage(float) {
-  return `${float.toFixed(2)} %`
-}
-function formatRank(rankNumber) {
-  return `# ${rankNumber}`;
 }
 
 /*------------------------ HELPER FUNCTIONS --------------------*/
@@ -283,7 +256,6 @@ function isHidden(id) {
   if (el.childElementCount === null) {
     return;
   }
-  // return (el.offsetParent === null)
   return (el.classList.value === 'hidden');
 }
 
@@ -299,6 +271,7 @@ function createElement(tagNameStr, id) {
 function addLabel(elNameToPrepend, labelContent) {
   const labelEl = document.createElement('label');
   Object.assign(labelEl, {
+    id: `${elNameToPrepend.id}-label`,
     className: 'label',
     htmlFor: elNameToPrepend.id,
     textContent: labelContent,
@@ -313,4 +286,41 @@ function createImage(url, assignID, alt) {
     alt: alt,
   });
   return image;
+}
+
+/*------------------------------ FORMATTERS --------------------------------*/
+function formatPrice(number) {
+  if (number > 1000000) {
+    number = `$${formatLargeNumber(number)}`;
+  } else if (number >= 1) {
+    number = number.toLocaleString(undefined, { style: 'currency', currency: 'USD' });
+  } else {
+    number = `$${number}`;
+  }
+  return number; 
+}
+// Formats large numbers over a million
+function formatLargeNumber(number) {
+  const bigNum = Math.floor(number / 1000000);
+  return `${bigNum.toLocaleString()} Million`;
+}
+// Formats timestamp received from the API to a readable local date & time
+function formatDate(timestamp) {
+  const fullDate = new Date(timestamp);
+  let dateTime = fullDate.toLocaleString();
+  dateTimeArr = dateTime.split(' ');
+  return `${dateTimeArr[1]} ${dateTimeArr[2]} on ${dateTimeArr[0]}`;
+}
+function formatPercentage(float) {
+  const changeEl = document.getElementById('change');
+  if (float > 0) {
+    changeEl.style.color = 'green';
+    return `+${float.toFixed(2)} %`;
+  } else {
+    changeEl.style.color = 'red';
+    return `${float.toFixed(2)} %`;
+  }
+}
+function formatRank(rankNumber) {
+  return `# ${rankNumber}`;
 }

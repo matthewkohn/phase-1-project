@@ -179,6 +179,10 @@ label.label {
   float: left;
 }
 
+label#change-label.label {
+  color: #000;
+}
+
 /*----------------- Info Article --------------------------*/
 article#info-section {
   padding: 0 60px;
@@ -187,11 +191,9 @@ article#info-section {
   height: 250px;
   overflow-y: scroll;
   scroll-behavior: smooth;
-  
   border: 1px solid rgb(89, 179, 0);
   border-radius: 5px;
   display: flex;
-  /* justify-content: center; */
   flex-direction: column;
 }
 
@@ -206,7 +208,7 @@ a#blank-info-link {
   margin-top: 80px;
   padding: 15px;
   border-radius: 15px;
-  font-size: 2rem;
+  font-size: 1.5rem;
   transition: color 0.4s ease-in, background-color 0.4s ease-in;
 }
 
@@ -259,7 +261,6 @@ button#info-button {
 button#info-button:hover {
   padding: 15px 50px;
   background-color: rgba(89, 179, 0, 0.5);
-  /* border: 3px solid rgb(89, 179, 0); */
   color: #000;
   cursor: pointer;
   transition: all 0.4s ease-out;
@@ -295,11 +296,11 @@ img#logo:hover {
 @media (max-width: 1200px) {
   h2#price {
     font-size: 2.4rem;
-    padding-bottom: 45px;
   }
   
   div#data-section {
     flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
   }
 
@@ -313,6 +314,9 @@ img#logo:hover {
     width: 80px;
   }
 
+  ol#data-left {
+    margin-right: 0;
+  }
   li#volume {
     margin: 0;
   }
@@ -322,14 +326,48 @@ img#logo:hover {
   }
 }
 
-@media (max-width: 760px) {
-  ol li {
-    /* text-align:center; */
-    line-height: 1.4rem;
-    font-size: 0.7rem;
+@media (max-width: 850px) {
+  select#coins-dropdown {
+    font-size: 1rem;
   }
 
+  h2#price {
+    padding-bottom: 10px;
+    font-size: 2rem;
+  }
+
+  div#data-section {
+    display: contents;
+    height: auto;
+  }
+
+  ol#data-left,
+  ol#data-right {
+    margin: 0;
+    padding: 0;
+    width: 70%;
+  }
+
+  ol li {
+    line-height: 1.4rem;
+    font-size: 0.8rem;
+    margin: 0;
+  }
+
+  article#info-section {
+    max-width: fit-content;
+    padding: 0 10px;
+  }
+
+  article#info-section p {
+    font-size: 0.7rem;
+    line-height: 1.3rem;
+  }
   footer#coin-footer-div span#time {
-    font-size: 0.5rem;
+    font-size: 0.6rem;
+  }
+
+  button#info-button {
+    font-size: 0.8rem;
   }
 }
