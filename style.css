@@ -167,6 +167,11 @@ ol#data-right {
   margin: 20px 40px;
 }
 
+ol#data-left {
+  /* margin-right: 60px; */
+  padding-right: 20px;
+}
+
 li {
   margin: 20px auto;
   text-align: right;
@@ -293,11 +298,7 @@ img#logo:hover {
 }
 
 /*---------------- Media Queries ----------------*/
-@media (max-width: 1200px) {
-  h2#price {
-    font-size: 2.4rem;
-  }
-  
+@media (max-width: 1260px) {
   div#data-section {
     flex-direction: column;
     justify-content: flex-start;
