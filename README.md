@@ -10,11 +10,14 @@ A single page application that displays on-the-fly crypto prices
 - “As a user, I want to be able to view price information of the crypto I select/input”
 
 ### MVP:
-- Use json data from coinGecko.com to display the current price of a crypto that has been selected in the DOM
+- Use json data from coinGecko.com to display the current price data of a crypto that has been selected in the DOM
 
 ### Future Build-out Opportunities:
 - Store user input for coins they own and use the price data from the API to display the users assets for each coin saved
-- Find and display coin metrics, such as volume, price increase/decrease for different time periods
+- Create predictive text to search by name instead of searching the dropdown
+- Create a reset button
+- Expand on the data displayed, including sparkline charts and price history
+- Find and create links to recent news sources
 
 
 

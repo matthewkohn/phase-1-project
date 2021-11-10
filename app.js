@@ -2,17 +2,15 @@
 // Display the dropdown and default images when DOM Content Loads
 document.addEventListener('DOMContentLoaded', init);
 
-// Fetch data from CoinGecko API, passing data to load Dropdown and create the DOM structure of the page
+// Fetch data from CoinGecko API, passing data to load the dropdown and create the DOM structure of the page
 function init() {
   fetchCoinList();
   loadPage();
 }
-
-/*--------------------------- ONCE DOM CONTENT LOADS ------------------------------*/
 // Fetch top-100 data from Coingecko and Create the Dropdown Menu
 function fetchCoinList() {
-  fetchFunction(createDropdown, 
-    'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_rank&per_page100&page=1&sparkline=false');
+  const marketAPI = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_rank&per_page100&page=1&sparkline=false';
+  fetchFunction(marketAPI, createDropdown);
   } 
 // Builds the structure of the rest of the DOM 
 function loadPage() {
@@ -52,9 +50,8 @@ function createOptions(dropdownEl, apiData) {
 }
 // Creates Default Option element
 function createDefaultOptionEl(dropdownEl) {
-  const defaultOption = document.createElement('option');
+  const defaultOption = createElement('option', 'default-label');
   Object.assign(defaultOption, {
-    id: 'default-label',
     textContent: 'CHOOSE A RANKED COIN',
     value: 'default',
     selected: 'true',
@@ -126,8 +123,8 @@ function handleDropdownSelection(event) {
   const targetValue = event.target.value;
   const dataURL = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${targetValue}&sparkline=false`;
   const infoURL = `https://api.coingecko.com/api/v3/coins/${targetValue}?localization=false&tickers=false&market_data=false&community_data=false&developer_data=false&sparkline=false`;
-  fetchFunction(formatDataContent, dataURL);
-  fetchFunction(handleInfoContent, infoURL);
+  fetchFunction(dataURL, formatDataContent);
+  fetchFunction(infoURL, handleInfoContent);
 }
 
 /*---------------------------- HANDLE DATA SECTION ------------------*/
@@ -204,7 +201,7 @@ function handleInfoContent(targetData) {
 
 /*------------------------ HELPER FUNCTIONS --------------------*/
 // Fetch API docs: https://www.coingecko.com/en/api/documentation
-function fetchFunction(dataHandler, apiURL) {
+function fetchFunction(apiURL, dataHandler) {
   const URL = apiURL;
   fetch(URL)
   .then(response => response.json())
@@ -309,7 +306,10 @@ function formatDate(timestamp) {
   const fullDate = new Date(timestamp);
   let dateTime = fullDate.toLocaleString();
   dateTimeArr = dateTime.split(' ');
-  return `${dateTimeArr[1]} ${dateTimeArr[2]} on ${dateTimeArr[0]}`;
+  time = dateTimeArr[1];
+  amOrPm = dateTimeArr[2];
+  date = dateTimeArr[0].split(',')[0];
+  return `${time} ${amOrPm} on ${date}`;
 }
 function formatPercentage(float) {
   const changeEl = document.getElementById('change');
