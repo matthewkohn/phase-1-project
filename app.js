@@ -18,8 +18,17 @@ function loadPage() {
   loadStartImages(coinContainer);
   buildCoinContainer(coinContainer);
 }
+/**
+ * 
+ * @param {*} data 
+ */
 
 /*-------------------------- CREATE THE DROPDOWN  --------------------------*/
+/**
+ * 
+ * @param {String} data 
+ * 
+ */
 function createDropdown(data) {
   const dropdownTarget = document.getElementById('dropdown-target');
   const dropdown = document.createElement('select');
