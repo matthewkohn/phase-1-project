@@ -1,198 +1,34 @@
-# Flatiron School Software Engineering Phase 1 Project
-## Crypto Tracker App
-A single page application that displays on-the-fly crypto prices
+# CRYPTO GENIE APP
 
+## Description
+Crypto Genie is a single-page application that displays on-the-fly crypto prices and information for today's top-100 cryptocurrencies.
+
+The [Coin Gecko API docs]('https://www.coingecko.com/en/api/documentation') can be found at: https://www.coingecko.com/en/api/documentation.
+
+Visit the [Crypto Genie Demo](https://matthewkohn.github.io/phase-1-project/) to try it out yourself! 
+
+This app was created as a final project for Flatiron Schools Phase-1.
+
+## Usage
+1. When the DOM loads, a dropdown menu containing the current top-100 cryptocurrencies is loaded.
+2. When a cryptocurrency name in the dropdown is selected, that coin's most recent price information is displayed in the DOM.
+3. Selecting the "Learn More About..." button below the price info display will toggle an info screen for that cryptocurrency, so you can read more about it.
+  a. If no information is provided by the CoinGecko API for the selected coin, a link for that coin is displayed that will take you to an outside page for that coin.
+4. When another cryptocurrency is selected, the page updates to display the selected coin's price information.
+5. If an error occurs, an error message loads in the DOM letting the user know to try again later.
+
+## Visuals
 ![CryptoGenie Demo Gif](media/cryptoGenieDemo.gif)
 
-## Visit the [CryptoGenie Demo](https://matthewkohn.github.io/phase-1-project/) to try it out yourself! 
-
-### User Story:
-- “As a user, I want to be able to view price information of the crypto I select/input”
-
-### MVP:
-- Use json data from coinGecko.com to display the current price data of a crypto that has been selected in the DOM
-
-### Future Build-out Opportunities:
+## Roadmap
 - Store user input for coins they own and use the price data from the API to display the users assets for each coin saved
 - Create predictive text to search by name instead of searching the dropdown
 - Create a reset button
 - Expand on the data displayed, including sparkline charts and price history
 - Find and create links to recent news sources
 
+## Contributing
+I am not accepting contributions at this time, as this is a project for school I am submitting.
 
-
-*******
-## GUIDELINES:
-*******
-# Phase 1 Project Guidelines
-
-## Learning Goals
-
-- Design and architect features across a frontend
-- Communicate and collaborate in a technical environment
-- Integrate JavaScript and an external API
-- Debug issues in small- to medium-sized projects
-- Build and iterate on a project MVP
-
-## Introduction
-
-Welcome to JavaScript Project Mode!
-
-You’ve worked so hard to get here and have learned a ton. Now it's time to bring
-it all together!
-
-For this project, you're going build a Single Page Application (**SPA**).
-Building this application will be challenging because it will integrate
-everything you've learned up to this point. Your frontend will be built with
-HTML, CSS, and JavaScript and will communicate with a public API.
-
-### Project Requirements
-
-1. Your app must be a HTML/CSS/JS frontend that accesses data from a public API.
-   All interactions between the client and the API should be handled
-   asynchronously and use JSON as the communication format.
-
-2. Your entire app must run on a single page. There should be NO redirects. In
-   other words, your project will contain a single HTML file.
-
-3. Your app needs to incorporate at least 3 separate event listeners
-   (DOMContentLoaded, click, change, submit, etc).
-
-4. Some interactivity is required. This could be as simple as adding a "like"
-   button or adding comments. These interactions do not need to persist after
-   reloading the page.
-
-5. Follow good coding practices. Keep your code DRY (Do not repeat yourself) by
-   utilizing functions to abstract repetitive code.
-
-### Stretch Goals
-
-1. Use [json-server][] in your project to persist your app's interactivity.
-
-## Strategy, Timeline, and Tips
-
-### Planning
-
-- Plan out your features
-- Develop user stories
-  - “As [ a user ], I want [ to perform this action ] so that
-    [ I can accomplish this goal ].”
-  - Features should not need you there to explain them to users
-- Plan out the structure of your JSON requests
-
-### Project Pitches
-
-Before you start working on your project, you'll pitch your project idea to your
-instructors for approval and feedback.
-
-For your project pitch, you should include:
-
-- The basic story of your application
-- The core features of your MVP
-- The API data you'll be using and how you'll use it
-- Challenges you expect to face
-- How you are meeting the requirements of the project
-
-Feel free to send this pitch to your instructor via slack asynchronously.
-
-### MVP ASAP
-
-- Build a Minimum Viable Product (MVP) as quickly as possible.
-  - Pick an API and explore it early on to ensure it will work for your need
-
-### Instructor Guidance
-
-You should strive to solve problems independently, but you also shouldn't waste
-your time stuck on a problem. A good guideline for a small bug is the rule of
-10s:
-
-- 10 minutes debugging the code
-- 10 minutes using Google and StackOverflow to try to find an answer
-- 10 minutes asking your fellow students for help
-- Asking an instructor
-
-If you seek out instructor guidance on your design from the start, they might
-help steer you into design and architectural decisions that will help you down
-the road. That will also give the instructors context for what your app is
-supposed to do, so you won't need to explain everything to them when asking for
-help debugging.
-
-### Guidelines for Staying Organized
-
-**Write down** the decisions you make about your project. This will not only
-help you think more clearly, it will also help you communicate your project to
-instructors when asking for help. In addition to writing everything down, we
-also recommend the following to help stay organized and on track:
-
-- Describe/sketch your ideas (use diagrams!).
-- Start by creating a frontend directory with the basic files you'll need
-- Next, build enough code to get some API data to work with. Don't worry about
-  building all of your async code yet, just get to the point where you can
-  access one endpoint on an API, then start working on getting that data
-  displayed.
-- Then, continue to build additional async code and frontend features.
-- Continue building features one by one.
-
-Check in with your instructors to make sure your scope and timeline are
-manageable.
-
-### JSON Server Instructions
-
-> **Note**: Using `json-server` is a stretch goal, so make sure you have a
-> working MVP before trying to set up `json-server`!
-
-You can use this [json-server template][] to generate your backend code. Using
-this template will make it easier to deploy your backend later on.
-
-[json-server template]: https://github.com/learn-co-curriculum/json-server-template
-
-If you prefer, instead of using the template, you can create a `db.json` file
-with a structure in the root of your project that looks like this:
-
-```json
-{
-  "toys": [
-    {
-      "id": 1,
-      "name": "Woody",
-      "image": "http://www.pngmart.com/files/3/Toy-Story-Woody-PNG-Photos.png",
-      "likes": 8
-    },
-    {
-      "id": 2,
-      "name": "Buzz Lightyear",
-      "image": "http://www.pngmart.com/files/6/Buzz-Lightyear-PNG-Transparent-Picture.png",
-      "likes": 14
-    }
-  ]
-}
-```
-
-Then, assuming you have `json-server` installed globally, you can run this
-command to run the server:
-
-```console
-$ json-server --watch db.json
-```
-
-Whatever top-level keys exist in your `db.json` file will determine the routes
-available. In the example above, since we have a key of `toys` pointing to an
-array of toy objects, `json-server` will generate the following routes:
-
-- `GET /toys`
-- `POST /toys`
-- `GET /toys/:id`
-- `PATCH /toys/:id`
-- `DELETE /toys/:id`
-
-You can consult the [json-server docs][] for more information.
-
-[json-server docs]: https://www.npmjs.com/package/json-server
-
-## Resources
-
-- [Public APIs](https://github.com/public-apis/public-apis)
-- [Fun APIs](https://apilist.fun/)
-- [json-server][]
-
-[json-server]: https://www.npmjs.com/package/json-server
+## License
+[MIT]('https://choosealicense.com/licenses/mit/')

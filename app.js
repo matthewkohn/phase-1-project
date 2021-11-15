@@ -209,7 +209,6 @@ function handleInfoContent(targetData) {
 }
 
 /*------------------------ HELPER FUNCTIONS --------------------*/
-// Fetch API docs: https://www.coingecko.com/en/api/documentation
 function fetchFunction(apiURL, dataHandler) {
   const URL = apiURL;
   fetch(URL)
