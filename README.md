@@ -30,4 +30,4 @@ Further additions to this project might include:
 I am not accepting contributions at this time, as this is a project for school I am submitting.
 
 ## License
-[MIT]('./license.txt')
+[Read the license here](./license.txt)
