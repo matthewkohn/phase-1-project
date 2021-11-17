@@ -1,13 +1,11 @@
 # CRYPTO GENIE APP
 
 ## Description
-Crypto Genie is a single-page application that displays on-the-fly crypto prices and information for today's top-100 cryptocurrencies.
-
-The [Coin Gecko API docs]('https://www.coingecko.com/en/api/documentation') can be found at: https://www.coingecko.com/en/api/documentation.
+Crypto Genie is a single-page application that pulls up-to-date crypto data for the current top-100 cryptocurrencies from the [CoinGecko API]('https://www.coingecko.com/en/api/documentation') and displays that data in the DOM.
 
 Visit the [Crypto Genie Demo](https://matthewkohn.github.io/phase-1-project/) to try it out yourself! 
 
-This app was created as a final project for Flatiron Schools Phase-1.
+This app was created as a final project for Flatiron Schools Software Engineering course, Phase-1.
 
 ## Usage
 1. When the DOM loads, a dropdown menu containing the current top-100 cryptocurrencies is loaded.
@@ -21,6 +19,7 @@ This app was created as a final project for Flatiron Schools Phase-1.
 ![CryptoGenie Demo Gif](media/cryptoGenieDemo.gif)
 
 ## Roadmap
+Further additions to this project might include:
 - Store user input for coins they own and use the price data from the API to display the users assets for each coin saved
 - Create predictive text to search by name instead of searching the dropdown
 - Create a reset button
