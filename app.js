@@ -1,5 +1,3 @@
-document.addEventListener('DOMContentLoaded', fetchCoinList);
-
 const fetchFunction = function(apiURL, dataHandler) {
   fetch(apiURL)
   .then(response => response.json())
@@ -9,7 +7,10 @@ const fetchFunction = function(apiURL, dataHandler) {
     displayErrorMessage();
   });
 }
-/*-------------------------- CREATE THE DROPDOWN --------------------------*/
+
+document.addEventListener('DOMContentLoaded', fetchCoinList);
+
+/*--------------------- CREATE THE DROPDOWN ---------------------*/
 // Fetch top-100 data from Coingecko
 function fetchCoinList() {
   const marketApiUrl = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_rank&per_page100&page=1&sparkline=false';
@@ -52,7 +53,7 @@ function createDefaultOptionEl(dropdownEl) {
   return dropdownEl.appendChild(defaultOption);
 }
 
-/*-------------------------------- DROPDOWN EVENT LISTENER -------------------------------*/
+/*--------------- DROPDOWN EVENT LISTENER -----------------*/
 // When a dropdown option is selected, fetch the current data to display & the info to be loaded/hidden
 function handleDropdownSelection(event) {
   event.preventDefault();  
@@ -63,7 +64,7 @@ function handleDropdownSelection(event) {
   fetchFunction(infoURL, handleInfoContent);
 }
 
-/*---------------------------- HANDLE DATA SECTION ------------------*/
+/*-------------------- HANDLE DATA SECTION ------------------*/
 // Formats the API data and returns a unique object @Param: {id: domContent}
 function formatDataContent(targetData) {
   const apiData = targetData[0];
@@ -96,15 +97,15 @@ function showDataContent(contentObj) {
       element.textContent = text;
     }
   }
-  const buttonEl = document.getElementById('info-button');
-  buttonEl.addEventListener('click', toggleInfoButton);
-  // Display data using @Param: toggleDisplay(idToHide, idToShow)
+  /* @Param: toggleDisplay(idToHide, idToShow) */
   toggleDisplay('placeholder-image', 'coin-structure');
   toggleDisplay('info-section', 'data-section');
 }
 
-/*-------------------------- HANDLE INFO SECTION ----------------------*/
+/*------------------- HANDLE INFO SECTION ------------------*/
 function handleInfoContent(targetData) {
+  const buttonEl = document.getElementById('info-button');
+  buttonEl.addEventListener('click', toggleInfoButton);
   const articleContainer = document.getElementById('info-section');
   removeAllChildNodes(articleContainer);
   const coinInfo = targetData.description.en;
@@ -123,7 +124,7 @@ function handleInfoContent(targetData) {
   });
 }
 
-/*------------------------ HELPER FUNCTIONS --------------------*/
+/*------------------ HELPER FUNCTIONS ------------------*/
 function displayErrorMessage() {
   const section = document.getElementById('dropdown-container');
   removeAllChildNodes(section);
@@ -139,7 +140,7 @@ function removeAllChildNodes(parent) {
   }
 }
 
-/*------------------------- TOGGLE BETWEEN DATA & INFO -----------------*/
+/*------------- TOGGLE BETWEEN DATA & INFO -------------*/
 function toggleInfoButton() {
   const button = document.getElementById('info-button');
   const name = document.getElementById('coin-name');
@@ -167,7 +168,7 @@ function isHidden(id) {
   return (el.classList.value === 'hidden');
 }
 
-/*-------------------- ELEMENT CREATION ----------------*/
+/*--------------- ELEMENT CREATION --------------*/
 function createElement(tagNameStr, id) {
   const element = document.createElement(tagNameStr);
   if (id) {
@@ -176,7 +177,7 @@ function createElement(tagNameStr, id) {
   return element;
 }
 
-/*------------------------------ FORMATTERS --------------------------------*/
+/*---------------- FORMATTERS ------------------*/
 function formatPrice(number) {
   if (number > 1000000) {
     number = `$${formatLargeNumber(number)}`;
