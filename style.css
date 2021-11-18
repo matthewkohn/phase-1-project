@@ -188,6 +188,10 @@ label#change-label.label {
   color: #000;
 }
 
+label#time-label {
+  padding-bottom: 10px;
+}
+
 /*----------------- Info Article --------------------------*/
 article#info-section {
   padding: 0 60px;

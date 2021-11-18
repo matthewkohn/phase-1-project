@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./style.css">
-  <title>Crypto Genie</title>
+  <title>Crypto Genie v1.1</title>
 </head>
 
 <body>
@@ -20,7 +20,47 @@
       <p class="instructions">Prices are displayed in $USD</p>
     </section>
 
-    <section id="coin-container"></section>
+    <section id="coin-container">
+      <img id="placeholder-image" src="https://images.unsplash.com/photo-1515879128292-964efc3ebb25?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=327&amp;q=80" alt="Green bottle on the edge of a sandy beach." >
+      <div id="coin-structure" class="hidden">
+        <header id="coin-header-div">
+          <img id="coin-image" src="#">
+          <h3 id="coin-name"></h3>
+          <span id="symbol"></span>
+          <h2 id="price"></h2>
+        </header>
+        <div id="data-section" class="">
+          <ol id="data-left">
+            <li class="hidden"></li>
+            <label id="change-label" class="label" for="change">24-Hour Change:</label>
+            <li id="change"></li>
+            <label id="high-24-label" class="label" for="high-24">24-Hour High:</label>
+            <li id="high-24"></li>
+            <label id="low-24-label" class="label" for="low-24">24-Hour Low:</label>
+            <li id="low-24"></li>
+            <label id="volume-label" class="label" for="volume">24-Hour Volume:</label>
+            <li id="volume"></li>
+          </ol>
+          <ol id="data-right">
+            <li class="hidden"></li>
+            <label id="rank-label" class="label" for="rank">Popularity:</label>
+            <li id="rank"></li>
+            <label id="market-cap-label" class="label" for="market-cap">Market Cap:</label>
+            <li id="market-cap"></li>
+            <label id="all-time-high-label" class="label" for="all-time-high">All Time High:</label>
+            <li id="all-time-high"></li>
+            <label id="supply-label" class="label" for="supply">Circulating Supply:</label>
+            <li id="supply"></li>
+          </ol>
+        </div>
+        <article id="info-section" class="hidden"></article>
+        <footer id="coin-footer-div">
+          <label id="time-label" class="label" for="time">Price information last updated:</label>
+          <span id="time"></span>
+          <button id="info-button"></button>
+        </footer>
+      </div>
+    </section>
   </main>
 
   <footer id="page-footer">

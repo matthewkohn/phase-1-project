@@ -1,10 +1,4 @@
-/*---------------- LOADING PAGE + FETCH FUNCTION EXPRESSION ------------------*/
-document.addEventListener('DOMContentLoaded', init);
-
-function init() {
-  fetchCoinList();
-  loadPage();
-}
+document.addEventListener('DOMContentLoaded', fetchCoinList);
 
 const fetchFunction = function(apiURL, dataHandler) {
   fetch(apiURL)
@@ -58,59 +52,6 @@ function createDefaultOptionEl(dropdownEl) {
   return dropdownEl.appendChild(defaultOption);
 }
 
-/*-------------------------------- LOAD PAGE ----------------------------------*/
-// Builds the structure of the rest of the DOM 
-function loadPage() {
-  const coinContainer = document.getElementById('coin-container');
-  loadStartImage(coinContainer);
-  buildCoinContainer(coinContainer);
-}
-function loadStartImage(container) {
-  const coinContainer = container;
-  const stockImageURL = 
-  'https://images.unsplash.com/photo-1515879128292-964efc3ebb25?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=327&q=80';
-  const genieImg = createImage(stockImageURL, 'placeholder-image', 'Green bottle on the edge of a sandy beach.');
-  coinContainer.append(genieImg);
-}
-// Creates the structure of the Coin Container
-function buildCoinContainer(container) {
-  const coinStructure = createElement('div', 'coin-structure');
-  coinStructure.className = 'hidden';
-  const headerSection = createElement('header', 'coin-header-div');
-  const dataSection = createElement('div', 'data-section');
-  const footerSection = createElement('footer', 'coin-footer-div');
-  const dataLeft = createElement('ol', 'data-left');
-  const dataRight = createElement('ol', 'data-right');
-  const articleEl = createElement('article', 'info-section');
-  articleEl.className = 'hidden';  
-  // Header of CoinContainer
-  const imageEl   = createImage( '#', 'coin-image');
-  const nameEl    = createElement('h3', 'coin-name');
-  const priceEl   = createElement('h2', 'price');
-  const symbolEl  = createElement('span', 'symbol');
-  // Data section of CoinContainer
-  const changeEl  = createElement('li', 'change');
-  const high24El  = createElement('li', 'high-24');
-  const low24El   = createElement('li', 'low-24');
-  const volumeEl  = createElement('li', 'volume');
-  const rankEl    = createElement('li', 'rank');
-  const mktCapEl  = createElement('li', 'market-cap');
-  const athEl     = createElement('li', 'all-time-high');
-  const supplyEl  = createElement('li', 'supply');
-  // Footer of CoinContainer
-  const timeEl    = createElement('span', 'time');
-  const buttonEl  = createElement('button', 'info-button');
-  buttonEl.addEventListener('click', toggleInfoButton);
-  // Append
-  headerSection.append(imageEl, nameEl, symbolEl, priceEl);
-  dataLeft.append(changeEl, high24El, low24El, volumeEl);
-  dataRight.append(rankEl, mktCapEl, athEl, supplyEl);
-  dataSection.append(dataLeft, dataRight);
-  footerSection.append(timeEl, buttonEl);
-  coinStructure.append(headerSection, dataSection, articleEl, footerSection);
-  container.append(coinStructure);
-};
-
 /*-------------------------------- DROPDOWN EVENT LISTENER -------------------------------*/
 // When a dropdown option is selected, fetch the current data to display & the info to be loaded/hidden
 function handleDropdownSelection(event) {
@@ -123,48 +64,41 @@ function handleDropdownSelection(event) {
 }
 
 /*---------------------------- HANDLE DATA SECTION ------------------*/
-// Formats the API data and returns a unique object where the key='id', 
-// and the value= an array with the domContent to be used and (optional) labelContent
-// {id: [ domContent, labelContent ] }
+// Formats the API data and returns a unique object @Param: {id: domContent}
 function formatDataContent(targetData) {
   const apiData = targetData[0];
   const formattedContentObj = {
-    'info-button':    [`Learn More About ${apiData.name}`],
-    'coin-image':     [apiData.image],
-    'coin-name':      [apiData.name],
-    'symbol':         [apiData.symbol],
-    'price':          [formatPrice(apiData.current_price)],
-    'change':         [formatPercentage(apiData.price_change_percentage_24h), '24-Hour Change:'],
-    'high-24':        [formatPrice(apiData.high_24h), '24-Hour High:'],
-    'low-24':         [formatPrice(apiData.low_24h), '24-Hour Low:'],
-    'all-time-high':  [formatPrice(apiData.ath), 'All Time High:'],
-    'rank':           [formatRank(apiData.market_cap_rank), 'Popularity:'],
-    'market-cap':     [formatPrice(apiData.market_cap), 'Market Cap:'],
-    'volume':         [formatLargeNumber(apiData.total_volume), '24-Hour Volume:'],
-    'supply':         [formatLargeNumber(apiData.circulating_supply), 'Circulating Supply:'],
-    'time':           [formatDate(apiData.last_updated), 'Price information last updated:'],
+    'info-button':    `Learn More About ${apiData.name}`,
+    'coin-image':     apiData.image,
+    'coin-name':      apiData.name,
+    'symbol':         apiData.symbol,
+    'price':          formatPrice(apiData.current_price),
+    'change':         formatPercentage(apiData.price_change_percentage_24h),
+    'high-24':        formatPrice(apiData.high_24h),
+    'low-24':         formatPrice(apiData.low_24h),
+    'all-time-high':  formatPrice(apiData.ath),
+    'rank':           formatRank(apiData.market_cap_rank),
+    'market-cap':     formatPrice(apiData.market_cap),
+    'volume':         formatLargeNumber(apiData.total_volume),
+    'supply':         formatLargeNumber(apiData.circulating_supply),
+    'time':           formatDate(apiData.last_updated),
   }
-  updateDataContent(formattedContentObj);
+  showDataContent(formattedContentObj);
 }
 // Takes the formatted API data {id: domContent} and updates the DOM
-function updateDataContent(contentObj) {
-  const coinObject = contentObj;
-  for (const [elementID, [text, label]] of Object.entries(coinObject)) {
+function showDataContent(contentObj) {
+  for (const [elementID, text] of Object.entries(contentObj)) {
     const element = document.getElementById(elementID);
     if (elementID === 'coin-image') {
       element.src = text;
-      element.alt = `${coinObject['coin-name']} logo`;
+      element.alt = `${contentObj['coin-name']} logo`;
     } else {
       element.textContent = text;
     }
-    if (label) {
-      addLabel(element, label);
-    }
   }
-  displayData();
-}
-// Display data using @param: toggleDisplay(idToHide, idToShow)
-function displayData() {
+  const buttonEl = document.getElementById('info-button');
+  buttonEl.addEventListener('click', toggleInfoButton);
+  // Display data using @Param: toggleDisplay(idToHide, idToShow)
   toggleDisplay('placeholder-image', 'coin-structure');
   toggleDisplay('info-section', 'data-section');
 }
@@ -183,10 +117,10 @@ function handleInfoContent(targetData) {
   }
   const paragraphArray = coinInfo.split(/\n\r\n/);
   paragraphArray.map(paragraph => {
-    const paragraphEl = createElement('p', 'paragraph');
+    const paragraphEl = createElement('p');
     paragraphEl.innerHTML = paragraph;
     articleContainer.append(paragraphEl);
-  })
+  });
 }
 
 /*------------------------ HELPER FUNCTIONS --------------------*/
@@ -240,27 +174,6 @@ function createElement(tagNameStr, id) {
     element.id = id;
   }
   return element;
-}
-
-function addLabel(elNameToPrepend, labelContent) {
-  const labelEl = document.createElement('label');
-  Object.assign(labelEl, {
-    id: `${elNameToPrepend.id}-label`,
-    className: 'label',
-    htmlFor: elNameToPrepend.id,
-    textContent: labelContent,
-  })
-  elNameToPrepend.prepend(labelEl);
-}
-
-function createImage(url, assignID, alt) {
-  const image = document.createElement('img');
-  Object.assign(image, {
-    id: assignID,
-    src: url,
-    alt: alt,
-  });
-  return image;
 }
 
 /*------------------------------ FORMATTERS --------------------------------*/
