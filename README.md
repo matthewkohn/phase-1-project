@@ -1,7 +1,7 @@
 # CRYPTO GENIE APP
 
 ## Description
-Crypto Genie is a single-page application that pulls up-to-date crypto data for the current top-100 cryptocurrencies from the [CoinGecko API]('https://www.coingecko.com/en/api/documentation') and displays that data in the DOM.
+Crypto Genie is a single-page application that pulls up-to-date crypto data for the current top-100 cryptocurrencies from the [CoinGecko API](https://www.coingecko.com/en/api/documentation) and displays that data in the DOM.
 
 Visit the [Crypto Genie Demo](https://matthewkohn.github.io/phase-1-project/) to try it out yourself! 
 
