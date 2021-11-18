@@ -1,23 +1,27 @@
-/*---------------- LOADING PAGE ------------------*/
+/*---------------- LOADING PAGE + FETCH FUNCTION EXPRESSION ------------------*/
 document.addEventListener('DOMContentLoaded', init);
 
 function init() {
   fetchCoinList();
   loadPage();
 }
-// Fetch top-100 data from Coingecko and Create the Dropdown Menu
-function fetchCoinList() {
-  const marketAPI = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_rank&per_page100&page=1&sparkline=false';
-  fetchFunction(marketAPI, createDropdown);
-  } 
-// Builds the structure of the rest of the DOM 
-function loadPage() {
-  const coinContainer = document.getElementById('coin-container');
-  loadStartImages(coinContainer);
-  buildCoinContainer(coinContainer);
-}
 
-/*-------------------------- CREATE THE DROPDOWN  --------------------------*/
+const fetchFunction = function(apiURL, dataHandler) {
+  fetch(apiURL)
+  .then(response => response.json())
+  .then(data => dataHandler(data))
+  .catch(error => {
+    console.log(error);
+    displayErrorMessage();
+  });
+}
+/*-------------------------- CREATE THE DROPDOWN --------------------------*/
+// Fetch top-100 data from Coingecko
+function fetchCoinList() {
+  const marketApiUrl = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_rank&per_page100&page=1&sparkline=false';
+  fetchFunction(marketApiUrl, createDropdown);
+}
+// Create the Dropdown Menu with data received from CoinGecko and adds 'change' event listener
 function createDropdown(data) {
   const dropdownTarget = document.getElementById('dropdown-target');
   const dropdown = document.createElement('select');
@@ -55,17 +59,18 @@ function createDefaultOptionEl(dropdownEl) {
 }
 
 /*-------------------------------- LOAD PAGE ----------------------------------*/
-function loadStartImages(container) {
+// Builds the structure of the rest of the DOM 
+function loadPage() {
+  const coinContainer = document.getElementById('coin-container');
+  loadStartImage(coinContainer);
+  buildCoinContainer(coinContainer);
+}
+function loadStartImage(container) {
   const coinContainer = container;
-  const coingeckoLink = document.getElementById('coingecko-link');
   const stockImageURL = 
   'https://images.unsplash.com/photo-1515879128292-964efc3ebb25?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=327&q=80';
   const genieImg = createImage(stockImageURL, 'placeholder-image', 'Green bottle on the edge of a sandy beach.');
   coinContainer.append(genieImg);
-  const coingeckoImgURL = 
-  'https://static.coingecko.com/s/coingecko-branding-guide-4f5245361f7a47478fa54c2c57808a9e05d31ac7ca498ab189a3827d6000e22b.png';
-  const geckoImg = createImage(coingeckoImgURL, 'logo', 'Coingecko logo.');
-  coingeckoLink.append(geckoImg);
 }
 // Creates the structure of the Coin Container
 function buildCoinContainer(container) {
@@ -79,7 +84,7 @@ function buildCoinContainer(container) {
   const articleEl = createElement('article', 'info-section');
   articleEl.className = 'hidden';  
   // Header of CoinContainer
-  const imageEl   = createImage( '#', 'coin-image', `Oops! Please try again.`);
+  const imageEl   = createImage( '#', 'coin-image');
   const nameEl    = createElement('h3', 'coin-name');
   const priceEl   = createElement('h2', 'price');
   const symbolEl  = createElement('span', 'symbol');
@@ -137,7 +142,7 @@ function formatDataContent(targetData) {
     'market-cap':     [formatPrice(apiData.market_cap), 'Market Cap:'],
     'volume':         [formatLargeNumber(apiData.total_volume), '24-Hour Volume:'],
     'supply':         [formatLargeNumber(apiData.circulating_supply), 'Circulating Supply:'],
-    'time':           [formatDate(apiData.last_updated), 'Last Updated At:'],
+    'time':           [formatDate(apiData.last_updated), 'Price information last updated:'],
   }
   updateDataContent(formattedContentObj);
 }
@@ -185,17 +190,6 @@ function handleInfoContent(targetData) {
 }
 
 /*------------------------ HELPER FUNCTIONS --------------------*/
-function fetchFunction(apiURL, dataHandler) {
-  const URL = apiURL;
-  fetch(URL)
-  .then(response => response.json())
-  .then(data => dataHandler(data))
-  .catch(error => {
-    console.log(error);
-    displayErrorMessage();
-  });
-}
-
 function displayErrorMessage() {
   const section = document.getElementById('dropdown-container');
   removeAllChildNodes(section);
@@ -234,7 +228,7 @@ function toggleDisplay(hideId, showId) {
 function isHidden(id) {
   const el = document.getElementById(id)
   if (el.childElementCount === null) {
-    return;
+    return false;
   }
   return (el.classList.value === 'hidden');
 }
